@@ -141,4 +141,293 @@
       margin-top:22px;
     }
 
-    
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:13px 18px;
+      border-radius:14px;
+      font-weight:700;
+      border:1px solid transparent;
+      transition:.2s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+
+    .btn.primary{
+      background:var(--accent);
+      color:#111827;
+    }
+
+    .btn.secondary{
+      border-color:var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+    }
+
+    .btn.green{
+      background:var(--accent2);
+      color:#052e16;
+    }
+
+    .mini-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .mini{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .mini strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .mini p{
+      margin:0;
+      font-size:.95rem;
+    }
+
+    .sections{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .card{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      min-height:210px;
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:1.1rem;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .tag{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.78rem;
+      margin-bottom:12px;
+      border:1px solid rgba(249,115,22,.25);
+      background:rgba(249,115,22,.13);
+      color:#fdba74;
+    }
+
+    .tag.green{
+      border-color:rgba(34,197,94,.25);
+      background:rgba(34,197,94,.13);
+      color:#bbf7d0;
+    }
+
+    .tag.blue{
+      border-color:rgba(96,165,250,.25);
+      background:rgba(96,165,250,.13);
+      color:#bfdbfe;
+    }
+
+    .tag.purple{
+      border-color:rgba(168,85,247,.25);
+      background:rgba(168,85,247,.13);
+      color:#e9d5ff;
+    }
+
+    .link-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .link-list a{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      font-size:.9rem;
+    }
+
+    .updates{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+    }
+
+    .update-box{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+    }
+
+    .update-box h3{
+      margin:0 0 10px;
+    }
+
+    .update-box ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+
+    footer{
+      margin-top:26px;
+      padding:18px 0 8px;
+      color:var(--muted);
+      border-top:1px solid var(--line);
+      font-size:.94rem;
+    }
+
+    @media (max-width: 980px){
+      .hero,.sections,.updates{grid-template-columns:1fr}
+      header{flex-direction:column; align-items:flex-start}
+      nav{justify-content:flex-start}
+      .brand{min-width:unset}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Simon Angel Cooks</h1>
+        <span>Cocina venezolana, recetas, ebooks y podcast</span>
+      </div>
+
+      <nav aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#tienda">Tienda</a>
+        <a href="#ebooks">Ebooks</a>
+        <a href="#noticias">Noticias</a>
+        <a href="#podcast">Podcast</a>
+        <a class="nav-btn" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ir a la tienda</a>
+      </nav>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="panel">
+          <h2>Bienvenido a mi espacio gastronómico.</h2>
+          <p>
+            Aquí comparto cocina, cultura, ideas para emprender, enlaces a mi tienda,
+            ebooks, noticias gastronómicas y mi podcast <strong>Sabores y Relatos</strong>.
+          </p>
+          <p>
+            Este sitio será la casa principal de todos mis proyectos culinarios y de contenido.
+            Empezamos simple, pero con una base lista para crecer.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn primary" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ver tienda</a>
+            <a class="btn secondary" href="#podcast">Escuchar podcast</a>
+            <a class="btn green" href="#ebooks">Ver ebooks</a>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="mini-grid">
+            <div class="mini">
+              <strong>Tienda</strong>
+              <p>Acceso directo a Tequenovations para productos y pedidos.</p>
+            </div>
+            <div class="mini">
+              <strong>Podcast</strong>
+              <p>Enlaces a YouTube, Spotify, iHeartRadio y Amazon Podcast.</p>
+            </div>
+            <div class="mini">
+              <strong>Ebooks</strong>
+              <p>Guías y libros digitales sobre cocina y negocio.</p>
+            </div>
+            <div class="mini">
+              <strong>Noticias</strong>
+              <p>Sección automatizada con novedades del mundo gastronómico.</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="sections">
+        <article class="card" id="tienda">
+          <span class="tag">Tienda</span>
+          <h3>Tequenovations</h3>
+          <p>
+            Mi tienda principal para productos y pedidos. Desde aquí puedes ir directo a todo lo relacionado con mis ventas.
+          </p>
+        </article>
+
+        <article class="card" id="ebooks">
+          <span class="tag green">Ebooks</span>
+          <h3>Próximamente</h3>
+          <p>
+            Aquí publicaré ebooks y guías descargables con recetas, técnicas y consejos para cocina y negocio.
+          </p>
+        </article>
+
+        <article class="card" id="noticias">
+          <span class="tag blue">Noticias</span>
+          <h3>Noticias gastronómicas</h3>
+          <p>
+            Esta sección mostrará actualizaciones automáticas sobre tendencias, cocina, restaurantes y cultura culinaria.
+          </p>
+        </article>
+
+        <article class="card" id="podcast">
+          <span class="tag purple">Podcast</span>
+          <h3>Sabores y Relatos</h3>
+          <p>
+            Disponible en YouTube, Spotify, iHeartRadio y Amazon Podcast. Más adelante agregaremos botones oficiales de cada plataforma.
+          </p>
+          <div class="link-list">
+            <a href="https://www.youtube.com" target="_blank" rel="noopener">YouTube</a>
+            <a href="https://open.spotify.com" target="_blank" rel="noopener">Spotify</a>
+            <a href="https://www.iheart.com" target="_blank" rel="noopener">iHeartRadio</a>
+            <a href="https://music.amazon.com/podcasts" target="_blank" rel="noopener">Amazon Podcast</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="updates">
+        <div class="update-box">
+          <h3>Últimos contenidos</h3>
+          <ul>
+            <li>Recetas y tips de cocina venezolana.</li>
+            <li>Ebooks sobre cocina y negocio gastronómico.</li>
+            <li>Noticias del mundo culinario con actualización diaria.</li>
+          </ul>
+        </div>
+
+        <div class="update-box">
+          <h3>Próximos pasos</h3>
+          <ul>
+            <li>Crear páginas separadas para cada sección.</li>
+            <li>Agregar botones oficiales del podcast.</li>
+            <li>Automatizar las noticias con fuentes RSS y funciones.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 Simon Angel Cooks. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+</body>
+</html>
