@@ -10,16 +10,17 @@
       --bg:#0b1220;
       --bg2:#111827;
       --card:#162033;
+      --card2:#1b2740;
       --text:#f8fafc;
       --muted:#cbd5e1;
       --accent:#f97316;
       --accent2:#22c55e;
       --accent3:#60a5fa;
       --line:rgba(255,255,255,.12);
+      --shadow:0 24px 60px rgba(0,0,0,.24);
     }
 
     *{box-sizing:border-box}
-
     html{scroll-behavior:smooth}
 
     body{
@@ -43,12 +44,12 @@
     header{
       position:sticky;
       top:0;
-      z-index:10;
+      z-index:1000;
       backdrop-filter: blur(14px);
-      background:rgba(2,6,23,.62);
+      background:rgba(2,6,23,.72);
       border:1px solid var(--line);
       border-radius:22px;
-      padding:16px 18px;
+      padding:14px 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -72,6 +73,17 @@
     .brand span{
       color:var(--muted);
       font-size:.92rem;
+    }
+
+    .menu-toggle{
+      display:none;
+      background:transparent;
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-size:1rem;
     }
 
     nav{
@@ -107,24 +119,24 @@
 
     .hero{
       display:grid;
-      grid-template-columns:1.35fr .95fr;
+      grid-template-columns:1.35fr .75fr;
       gap:22px;
+      align-items:center;
       margin-top:22px;
-      align-items:stretch;
     }
 
     .panel{
-      background:rgba(22,32,51,.88);
+      background:rgba(22,32,51,.9);
       border:1px solid var(--line);
       border-radius:26px;
       padding:30px;
-      box-shadow:0 24px 60px rgba(0,0,0,.24);
+      box-shadow:var(--shadow);
     }
 
     .hero h2{
       margin:0 0 14px;
       font-size:clamp(2rem, 4vw, 3.7rem);
-      line-height:1.05;
+      line-height:1.03;
     }
 
     .hero p{
@@ -134,7 +146,7 @@
       font-size:1.03rem;
     }
 
-    .cta-row{
+    .actions{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
@@ -151,24 +163,30 @@
       font-weight:700;
       border:1px solid transparent;
       transition:.2s ease;
+      min-height:46px;
     }
 
     .btn:hover{transform:translateY(-1px)}
 
-    .btn.primary{
-      background:var(--accent);
-      color:#111827;
+    .btn.primary{background:var(--accent); color:#111827}
+    .btn.secondary{border-color:var(--line); background:rgba(255,255,255,.03); color:var(--text)}
+    .btn.green{background:var(--accent2); color:#052e16}
+
+    .hero-image{
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
 
-    .btn.secondary{
-      border-color:var(--line);
-      background:rgba(255,255,255,.03);
-      color:var(--text);
-    }
-
-    .btn.green{
-      background:var(--accent2);
-      color:#052e16;
+    .hero-image img{
+      width:100%;
+      max-width:340px;
+      aspect-ratio:4 / 5;
+      object-fit:cover;
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 18px 45px rgba(0,0,0,.3);
+      background:#0f172a;
     }
 
     .mini-grid{
@@ -192,6 +210,7 @@
 
     .mini p{
       margin:0;
+      color:var(--muted);
       font-size:.95rem;
     }
 
@@ -298,9 +317,54 @@
 
     @media (max-width: 980px){
       .hero,.sections,.updates{grid-template-columns:1fr}
-      header{flex-direction:column; align-items:flex-start}
-      nav{justify-content:flex-start}
-      .brand{min-width:unset}
+      .hero-image img{max-width:260px}
+      .sections{grid-template-columns:1fr 1fr}
+    }
+
+    @media (max-width: 720px){
+      header{
+        align-items:flex-start;
+      }
+
+      .menu-toggle{
+        display:inline-flex;
+        align-items:center;
+      }
+
+      nav{
+        display:none;
+        width:100%;
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      nav.open{
+        display:flex;
+      }
+
+      nav a{
+        text-align:center;
+      }
+
+      .hero{
+        grid-template-columns:1fr;
+      }
+
+      .mini-grid{
+        grid-template-columns:1fr;
+      }
+
+      .sections{
+        grid-template-columns:1fr;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
+
+      .btn{
+        width:100%;
+      }
     }
   </style>
 </head>
@@ -312,7 +376,9 @@
         <span>Cocina venezolana, recetas, ebooks y podcast</span>
       </div>
 
-      <nav aria-label="Navegación principal">
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰ Menú</button>
+
+      <nav id="mainNav" aria-label="Navegación principal">
         <a href="#inicio">Inicio</a>
         <a href="#tienda">Tienda</a>
         <a href="#ebooks">Ebooks</a>
@@ -331,17 +397,23 @@
             ebooks, noticias gastronómicas y mi podcast <strong>Sabores y Relatos</strong>.
           </p>
           <p>
-            Este sitio será la casa principal de todos mis proyectos culinarios y de contenido.
+            Este sitio será la casa principal de mis proyectos culinarios y de contenido.
             Empezamos simple, pero con una base lista para crecer.
           </p>
 
-          <div class="cta-row">
+          <div class="actions">
             <a class="btn primary" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ver tienda</a>
             <a class="btn secondary" href="podcast.html">Escuchar podcast</a>
             <a class="btn green" href="#ebooks">Ver ebooks</a>
           </div>
         </div>
 
+        <div class="hero-image panel">
+          <img src="images/simon.jpg" alt="Simon Angel de Simon Angel Cooks" />
+        </div>
+      </section>
+
+      <section class="hero" style="grid-template-columns:1.3fr .7fr; margin-top:16px;">
         <aside class="panel">
           <div class="mini-grid">
             <div class="mini">
@@ -362,6 +434,16 @@
             </div>
           </div>
         </aside>
+
+        <div class="panel">
+          <h3 style="margin-top:0;">Enlaces rápidos</h3>
+          <p style="margin-top:0;">Lleva al usuario donde más te interesa sin perder claridad.</p>
+          <div class="actions" style="margin-top:16px;">
+            <a class="btn secondary" href="#tienda">Tienda</a>
+            <a class="btn secondary" href="#noticias">Noticias</a>
+            <a class="btn secondary" href="podcast.html">Podcast</a>
+          </div>
+        </div>
       </section>
 
       <section class="sections">
@@ -389,17 +471,14 @@
           </p>
         </article>
 
-        <article class="card" id="podcast">
+        <article class="card">
           <span class="tag purple">Podcast</span>
           <h3>Sabores y Relatos</h3>
           <p>
-            Disponible en YouTube, Spotify, iHeartRadio y Amazon Podcast. Más adelante agregaremos botones oficiales de cada plataforma.
+            Disponible en varias plataformas. Entra a la página del podcast para escuchar y ver los botones oficiales.
           </p>
           <div class="link-list">
-           <a href="https://www.youtube.com/@saboresyrelatos" target="_blank" rel="noopener">YouTube</a>
-<a href="https://open.spotify.com/show/64SdDVenYMM69cdX5pxX4P?si=f91725e1662e4d34" target="_blank" rel="noopener">Spotify</a>
-<a href="https://www.iheart.com/podcast/269-sabores-y-relatos-con-simo-164515460" target="_blank" rel="noopener">iHeartRadio</a>
-<a href="https://a.co/d/0bZNgAoP" target="_blank" rel="noopener">Amazon Podcast</a>
+            <a href="podcast.html">Ir al podcast</a>
           </div>
         </article>
       </section>
@@ -418,7 +497,7 @@
           <h3>Próximos pasos</h3>
           <ul>
             <li>Crear páginas separadas para cada sección.</li>
-            <li>Agregar botones oficiales del podcast.</li>
+            <li>Agregar reproductor o botones oficiales del podcast.</li>
             <li>Automatizar las noticias con fuentes RSS y funciones.</li>
           </ul>
         </div>
@@ -429,5 +508,27 @@
       <p>© 2026 Simon Angel Cooks. Todos los derechos reservados.</p>
     </footer>
   </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('open');
+      const isOpen = mainNav.classList.contains('open');
+      menuToggle.textContent = isOpen ? '✕ Cerrar' : '☰ Menú';
+      menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+    });
+
+    mainNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 720) {
+          mainNav.classList.remove('open');
+          menuToggle.textContent = '☰ Menú';
+          menuToggle.setAttribute('aria-label', 'Abrir menú');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
