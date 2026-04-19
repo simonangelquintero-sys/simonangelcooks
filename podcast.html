@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sabores y Relatos, el podcast de Simon Angel Cooks, disponible en YouTube, Spotify, iHeartRadio y Amazon Podcast." />
+  <title>Sabores y Relatos | Podcast</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#162033;
+      --text:#f8fafc;
+      --muted:#cbd5e1;
+      --accent:#f97316;
+      --accent2:#60a5fa;
+      --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(249,115,22,.18), transparent 30%),
+        linear-gradient(180deg, #0f172a 0%, #0b1220 55%, #020617 100%);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:24px}
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding:14px 0 28px;
+    }
+    .brand h1{margin:0; font-size:1.5rem}
+    .brand p{margin:4px 0 0; color:var(--muted); font-size:.95rem}
+    nav{display:flex; gap:12px; flex-wrap:wrap}
+    nav a{
+      padding:10px 14px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+    }
+    .hero{
+      background:rgba(22,32,51,.9);
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:32px;
+      box-shadow:0 24px 60px rgba(0,0,0,.24);
+    }
+    .hero h2{
+      margin:0 0 12px;
+      font-size:clamp(2rem, 4vw, 3.4rem);
+      line-height:1.05;
+    }
+    .hero p{
+      margin:0 0 16px;
+      color:var(--muted);
+      max-width:68ch;
+      font-size:1.02rem;
+    }
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:13px 18px;
+      border-radius:14px;
+      font-weight:700;
+      border:1px solid transparent;
+      transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{background:var(--accent); color:#111827}
+    .btn.secondary{border-color:var(--line); background:rgba(255,255,255,.03)}
+    .grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      margin-top:20px;
+    }
+    .card{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+    }
+    .card h3{margin:0 0 10px; font-size:1.15rem}
+    .card p{margin:0; color:var(--muted)}
+    .platforms{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+    .platform{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+    }
+    .platform strong{display:block; margin-bottom:6px}
+    .platform span{color:var(--muted); font-size:.92rem}
+    .episode-list{
+      margin:12px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+    .episode-list li{margin-bottom:10px}
+    footer{
+      margin-top:24px;
+      padding:18px 0 6px;
+      color:var(--muted);
+      border-top:1px solid var(--line);
+      font-size:.94rem;
+    }
+    @media (max-width: 900px){
+      header,.grid{grid-template-columns:1fr; display:grid}
+      nav{justify-content:flex-start}
+      .platforms{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Sabores y Relatos</h1>
+        <p>Podcast de cocina, historias y cultura gastronómica</p>
+      </div>
+      <nav aria-label="Navegación del podcast">
+        <a href="index.html">Inicio</a>
+        <a href="#plataformas">Plataformas</a>
+        <a href="#episodios">Episodios</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h2>Historias que se cocinan con sabor.</h2>
+        <p>
+          <strong>Sabores y Relatos</strong> es el podcast de Simon Angel Cooks donde comparto experiencias,
+          cocina, emprendimiento y conversaciones alrededor de la gastronomía.
+        </p>
+        <p>
+          Puedes escuchar el contenido en varias plataformas y más adelante veremos cómo agregar episodios destacados y enlaces directos por temporada.
+        </p>
+
+        <div class="actions">
+          <a class="btn primary" href="https://www.youtube.com" target="_blank" rel="noopener">Escuchar en YouTube</a>
+          <a class="btn secondary" href="#plataformas">Ver plataformas</a>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card" id="plataformas">
+          <h3>Plataformas disponibles</h3>
+          <p>Encuentra el podcast en tu aplicación favorita:</p>
+
+          <div class="platforms">
+            <div class="platform">
+              <strong>YouTube</strong>
+              <span>Ver episodios y clips en video.</span>
+            </div>
+            <div class="platform">
+              <strong>Spotify</strong>
+              <span>Escucha desde la app de música y podcasts.</span>
+            </div>
+            <div class="platform">
+              <strong>iHeartRadio</strong>
+              <span>Acceso rápido desde iHeart.</span>
+            </div>
+            <div class="platform">
+              <strong>Amazon Podcast</strong>
+              <span>Disponible para usuarios de Amazon Music/Podcasts.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" id="episodios">
+          <h3>Próximos episodios</h3>
+          <ul class="episode-list">
+            <li>Cómo nació Simon Angel Cooks.</li>
+            <li>Tequeños, cocina venezolana y tradición.</li>
+            <li>Emprender con sabor: historias del negocio.</li>
+            <li>Noticias y tendencias de la gastronomía.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 Simon Angel Cooks · Sabores y Relatos</p>
+    </footer>
+  </div>
+</body>
+</html>
