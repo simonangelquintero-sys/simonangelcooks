@@ -1,0 +1,14 @@
+name = "simonangelcooks-news"
+main = "src/index.js"
+compatibility_date = "2026-04-21"
+
+[assets]
+directory = "../public"
+
+[vars]
+APP_NAME = "Simon Angel Cooks News"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "simonangelcooks-news-db"
+database_id = "cc88d1e7-19b4-4b30-aceb-def9514b6ade"
