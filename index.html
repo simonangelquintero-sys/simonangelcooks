@@ -3,32 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Simon Angel Cooks: cocina venezolana, recetas, ebooks, noticias gastronómicas y podcast." />
+  <meta name="description" content="Simon Angel Cooks: cocina venezolana, tienda, podcast, ebooks y contenido gastronómico." />
   <title>Simon Angel Cooks</title>
+
   <style>
     :root{
       --bg:#0b1220;
+      --bg-soft:#111a2b;
       --card:#162033;
-      --card2:#1b2740;
+      --card-soft:#1b2740;
       --text:#f8fafc;
       --muted:#cbd5e1;
-      --accent:#f97316;
-      --accent2:#22c55e;
-      --accent3:#60a5fa;
       --line:rgba(255,255,255,.12);
+      --accent:#f97316;
+      --green:#7ccf53;
+      --blue:#60a5fa;
+      --purple:#a78bfa;
       --shadow:0 24px 60px rgba(0,0,0,.24);
+      --radius:22px;
+      --radius-sm:16px;
+      --max:1120px;
     }
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-
     body{
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(249,115,22,.18), transparent 30%),
-        linear-gradient(180deg, #0f172a 0%, #0b1220 55%, #020617 100%);
       color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(249,115,22,.12), transparent 28%),
+        linear-gradient(180deg, #0f172a 0%, #0b1220 55%, #020617 100%);
       line-height:1.6;
     }
 
@@ -38,127 +43,118 @@
       display:block;
     }
 
-    a{color:inherit; text-decoration:none}
-
-    .wrap{
-      max-width:1180px;
-      margin:0 auto;
-      padding:16px;
+    a{
+      color:inherit;
+      text-decoration:none;
     }
 
-    header{
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .site-header{
       position:sticky;
-      top:0;
+      top:10px;
       z-index:1000;
-      backdrop-filter: blur(14px);
-      background:rgba(2,6,23,.72);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px 16px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      margin-top:8px;
-      flex-wrap:wrap;
+      gap:14px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(7,12,24,.78);
+      backdrop-filter:blur(12px);
+      box-shadow:var(--shadow);
     }
 
     .brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
       min-width:0;
     }
 
     .brand h1{
       margin:0;
-      font-size:1.2rem;
-      line-height:1.2;
+      font-size:1.35rem;
+      line-height:1.15;
     }
 
-    .brand span{
+    .brand p{
+      margin:4px 0 0;
       color:var(--muted);
-      font-size:.88rem;
+      font-size:.92rem;
     }
 
     .menu-toggle{
       display:none;
-      background:transparent;
       border:1px solid var(--line);
+      background:transparent;
       color:var(--text);
       border-radius:12px;
       padding:10px 12px;
       cursor:pointer;
-      font-size:1rem;
-      min-height:42px;
+      min-height:44px;
     }
 
-    nav{
+    .nav{
       display:flex;
       align-items:center;
       gap:10px;
       flex-wrap:wrap;
-      justify-content:flex-end;
     }
 
-    nav a{
+    .nav a{
       padding:10px 14px;
-      border:1px solid transparent;
       border-radius:999px;
       color:var(--muted);
       transition:.2s ease;
-      white-space:nowrap;
     }
 
-    nav a:hover{
+    .nav a:hover{
       color:var(--text);
-      border-color:var(--line);
-      background:rgba(255,255,255,.04);
+      background:rgba(255,255,255,.05);
     }
 
-    .nav-btn{
-      padding:10px 16px;
-      border-radius:999px;
+    .nav .store-link{
       background:var(--accent);
       color:#111827;
       font-weight:700;
-      border:0;
     }
 
     .hero{
       display:grid;
-      grid-template-columns:1.35fr .75fr;
+      grid-template-columns:1.2fr .8fr;
       gap:18px;
-      align-items:center;
-      margin-top:16px;
+      margin-top:18px;
     }
 
     .panel{
-      background:rgba(22,32,51,.92);
+      background:rgba(22,32,51,.94);
       border:1px solid var(--line);
-      border-radius:22px;
-      padding:22px;
+      border-radius:var(--radius);
+      padding:24px;
       box-shadow:var(--shadow);
     }
 
-    .hero h2{
+    .hero-copy h2{
       margin:0 0 12px;
-      font-size:clamp(1.8rem, 5vw, 3.5rem);
-      line-height:1.05;
-      word-break:break-word;
+      font-size:clamp(2.1rem, 4vw, 4rem);
+      line-height:1.02;
+      max-width:10ch;
     }
 
-    .hero p{
+    .hero-copy p{
       margin:0 0 14px;
       color:var(--muted);
-      max-width:60ch;
+      max-width:62ch;
       font-size:1rem;
     }
 
     .actions{
       display:flex;
-      gap:10px;
       flex-wrap:wrap;
+      gap:10px;
       margin-top:18px;
     }
 
@@ -166,80 +162,87 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      padding:12px 16px;
+      min-height:46px;
+      padding:12px 18px;
       border-radius:14px;
       font-weight:700;
       border:1px solid transparent;
       transition:.2s ease;
-      min-height:44px;
     }
 
-    .btn:hover{transform:translateY(-1px)}
-    .btn.primary{background:var(--accent); color:#111827}
-    .btn.secondary{border-color:var(--line); background:rgba(255,255,255,.03); color:var(--text)}
-    .btn.green{background:var(--accent2); color:#052e16}
+    .btn:hover{
+      transform:translateY(-1px);
+    }
 
-    .hero-image{
+    .btn-primary{
+      background:var(--accent);
+      color:#111827;
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.04);
+      border-color:var(--line);
+      color:var(--text);
+    }
+
+    .hero-photo{
       display:flex;
-      justify-content:center;
       align-items:center;
+      justify-content:center;
+      min-height:100%;
     }
 
-    .hero-image img{
+    .hero-photo img{
       width:100%;
-      max-width:300px;
+      max-width:320px;
       aspect-ratio:4 / 5;
       object-fit:cover;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 18px 45px rgba(0,0,0,.3);
+      border-radius:24px;
+      border:1px solid var(--line);
+      box-shadow:0 16px 40px rgba(0,0,0,.28);
       background:#0f172a;
     }
 
-    .mini-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
+    .section-title{
+      margin:28px 0 14px;
+      font-size:1.1rem;
+      color:var(--text);
     }
 
-    .mini{
-      background:rgba(255,255,255,.04);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
-    }
-
-    .mini strong{
-      display:block;
-      margin-bottom:6px;
-      font-size:1rem;
-    }
-
-    .mini p{
-      margin:0;
-      color:var(--muted);
-      font-size:.94rem;
-    }
-
-    .sections{
+    .cards{
       display:grid;
       grid-template-columns:repeat(4, 1fr);
       gap:14px;
-      margin-top:16px;
     }
 
     .card{
       background:rgba(255,255,255,.04);
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:20px;
       padding:18px;
-      min-height:200px;
+      min-height:220px;
     }
+
+    .tag{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.78rem;
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+      background:rgba(255,255,255,.06);
+    }
+
+    .tag.orange{background:rgba(249,115,22,.14); color:#fdba74; border-color:rgba(249,115,22,.22)}
+    .tag.green{background:rgba(124,207,83,.14); color:#c9f3b6; border-color:rgba(124,207,83,.22)}
+    .tag.blue{background:rgba(96,165,250,.14); color:#bfdbfe; border-color:rgba(96,165,250,.22)}
+    .tag.purple{background:rgba(167,139,250,.14); color:#ddd6fe; border-color:rgba(167,139,250,.22)}
 
     .card h3{
       margin:0 0 10px;
-      font-size:1.05rem;
+      font-size:1.1rem;
+      line-height:1.2;
     }
 
     .card p{
@@ -248,220 +251,227 @@
       font-size:.97rem;
     }
 
-    .tag{
+    .card .inline-link{
       display:inline-block;
-      padding:6px 10px;
+      margin-top:14px;
+      padding:9px 12px;
       border-radius:999px;
-      font-size:.76rem;
-      margin-bottom:12px;
-      border:1px solid rgba(249,115,22,.25);
-      background:rgba(249,115,22,.13);
-      color:#fdba74;
-    }
-
-    .tag.green{
-      border-color:rgba(34,197,94,.25);
-      background:rgba(34,197,94,.13);
-      color:#bbf7d0;
-    }
-
-    .tag.blue{
-      border-color:rgba(96,165,250,.25);
-      background:rgba(96,165,250,.13);
-      color:#bfdbfe;
-    }
-
-    .tag.purple{
-      border-color:rgba(168,85,247,.25);
-      background:rgba(168,85,247,.13);
-      color:#e9d5ff;
-    }
-
-    .link-list{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
-    }
-
-    .link-list a{
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
       border:1px solid var(--line);
-      font-size:.88rem;
+      background:rgba(255,255,255,.04);
+      font-size:.92rem;
     }
 
-    .updates{
-      margin-top:16px;
+    .about{
+      margin-top:18px;
+    }
+
+    .about p{
+      margin:0 0 14px;
+      color:var(--muted);
+      max-width:72ch;
+    }
+
+    .about-grid{
       display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:14px;
+      grid-template-columns:repeat(3, 1fr);
+      gap:12px;
+      margin-top:14px;
     }
 
-    .update-box{
+    .about-item{
       background:rgba(255,255,255,.04);
       border:1px solid var(--line);
       border-radius:18px;
-      padding:18px;
+      padding:16px;
     }
 
-    .update-box h3{
-      margin:0 0 10px;
-      font-size:1.05rem;
+    .about-item strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:1rem;
     }
 
-    .update-box ul{
-      margin:0;
-      padding-left:18px;
+    .about-item span{
       color:var(--muted);
+      font-size:.94rem;
     }
 
-    .update-box li{margin-bottom:8px}
-
-    footer{
-      margin-top:20px;
-      padding:16px 0 6px;
-      color:var(--muted);
+    .footer{
+      margin-top:28px;
+      padding:16px 0 8px;
       border-top:1px solid var(--line);
+      color:var(--muted);
       font-size:.92rem;
     }
 
     @media (max-width: 980px){
-      .hero,.updates{grid-template-columns:1fr}
-      .sections{grid-template-columns:1fr 1fr}
-      .hero-image img{max-width:240px}
+      .hero{
+        grid-template-columns:1fr;
+      }
+
+      .cards{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .about-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero-copy h2{
+        max-width:none;
+      }
     }
 
     @media (max-width: 720px){
-      .menu-toggle{display:inline-flex}
-      nav{
+      .site-header{
+        align-items:flex-start;
+      }
+
+      .menu-toggle{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+      }
+
+      .nav{
         display:none;
         width:100%;
         flex-direction:column;
         align-items:stretch;
+        margin-top:8px;
       }
-      nav.open{display:flex}
-      nav a{
-        text-align:center;
+
+      .nav.open{
+        display:flex;
+      }
+
+      .nav a{
         width:100%;
+        text-align:center;
       }
-      .hero{
+
+      .cards{
         grid-template-columns:1fr;
       }
-      .mini-grid{
-        grid-template-columns:1fr;
-      }
-      .sections{
-        grid-template-columns:1fr;
-      }
+
       .actions{
         flex-direction:column;
       }
+
       .btn{
         width:100%;
       }
-      .panel{
+
+      .panel,
+      .card{
         padding:18px;
       }
-      .hero h2{
-        font-size:1.9rem;
+
+      .hero-copy h2{
+        font-size:2.3rem;
+      }
+
+      .hero-photo img{
+        max-width:240px;
       }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
+    <header class="site-header">
       <div class="brand">
         <h1>Simon Angel Cooks</h1>
-        <span>Cocina venezolana, recetas, ebooks y podcast</span>
+        <p>Cocina venezolana, tienda, podcast y contenido gastronómico</p>
       </div>
 
       <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰ Menú</button>
 
-      <nav id="mainNav" aria-label="Navegación principal">
+      <nav class="nav" id="mainNav" aria-label="Navegación principal">
         <a href="#inicio">Inicio</a>
-        <a href="#tienda">Tienda</a>
-        <a href="#ebooks">Ebooks</a>
-        <a href="#noticias">Noticias</a>
+        <a href="#acerca">Acerca de mí</a>
+        <a href="#secciones">Secciones</a>
         <a href="podcast.html">Podcast</a>
-        <a class="nav-btn" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ir a la tienda</a>
+        <a class="store-link" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ir a la tienda</a>
       </nav>
     </header>
 
     <main id="inicio">
       <section class="hero">
-        <div class="panel">
+        <div class="panel hero-copy">
           <h2>Bienvenido a mi espacio gastronómico.</h2>
           <p>
-            Aquí comparto cocina, cultura, ideas para emprender, enlaces a mi tienda,
-            ebooks, noticias gastronómicas y mi podcast <strong>Sabores y Relatos</strong>.
+            Aquí comparto cocina, cultura, emprendimiento, proyectos gastronómicos y contenido
+            que conecta mi tienda, mi podcast y futuras publicaciones.
           </p>
           <p>
-            Este sitio será la casa principal de mis proyectos culinarios y de contenido.
-            Empezamos simple, pero con una base lista para crecer.
+            Este sitio está pensado como la casa principal de Simon Angel Cooks:
+            una base simple, clara y lista para crecer.
           </p>
 
           <div class="actions">
-            <a class="btn primary" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ver tienda</a>
-            <a class="btn secondary" href="podcast.html">Escuchar podcast</a>
-            <a class="btn green" href="#ebooks">Ver ebooks</a>
+            <a class="btn btn-primary" href="https://www.tequenovations.com" target="_blank" rel="noopener">Ver tienda</a>
+            <a class="btn btn-secondary" href="podcast.html">Escuchar podcast</a>
           </div>
         </div>
 
-        <div class="hero-image panel">
-          <img src="images/simon.jpg" alt="Simon Angel de Simon Angel Cooks" />
+        <div class="panel hero-photo">
+          <img src="images/simon.jpg" alt="Simon Angel Quintero, chef venezolano y creador de Simon Angel Cooks" />
         </div>
       </section>
 
-      <section class="hero" style="grid-template-columns:1.3fr .7fr; margin-top:14px;">
-        <aside class="panel">
-          <div class="mini-grid">
-            <div class="mini">
-              <strong>Tienda</strong>
-              <p>Acceso directo a Tequenovations para productos y pedidos.</p>
-            </div>
-            <div class="mini">
-              <strong>Podcast</strong>
-              <p>Enlaces a YouTube, Spotify, iHeartRadio y Amazon Podcast.</p>
-            </div>
-            <div class="mini">
-              <strong>Ebooks</strong>
-              <p>Guías y libros digitales sobre cocina y negocio.</p>
-            </div>
-            <div class="mini">
-              <strong>Noticias</strong>
-              <p>Sección automatizada con novedades del mundo gastronómico.</p>
-            </div>
-          </div>
-        </aside>
+      <section class="panel about" id="acerca">
+        <span class="tag blue">Acerca de mí</span>
+        <h2 class="section-title" style="margin-top:0;">Simon Quintero</h2>
+        <p>
+          Soy chef venezolano con experiencia en cocinas de Venezuela, Argentina y Estados Unidos.
+          He trabajado como Executive Chef, Sous Chef, Lead Cook y Consulting Chef en restaurantes,
+          hoteles y proyectos gastronómicos. También he participado como instructor, conferencista
+          y chef invitado en medios y eventos culinarios.
+        </p>
 
-        <div class="panel">
-          <h3 style="margin-top:0;">Enlaces rápidos</h3>
-          <p style="margin-top:0;">Lleva al usuario donde más te interesa sin perder claridad.</p>
-          <div class="actions" style="margin-top:16px;">
-            <a class="btn secondary" href="#tienda">Tienda</a>
-            <a class="btn secondary" href="#noticias">Noticias</a>
-            <a class="btn secondary" href="podcast.html">Podcast</a>
+        <div class="about-grid">
+          <div class="about-item">
+            <strong>Experiencia internacional</strong>
+            <span>Trayectoria profesional en Venezuela, Argentina y Estados Unidos.</span>
+          </div>
+          <div class="about-item">
+            <strong>Consultoría y formación</strong>
+            <span>Experiencia como chef consultor, instructor y participante en talleres gastronómicos.</span>
+          </div>
+          <div class="about-item">
+            <strong>Identidad y contenido</strong>
+            <span>Un proyecto que une cocina venezolana, comunicación y emprendimiento.</span>
           </div>
         </div>
       </section>
 
-      <section class="sections">
+      <h2 class="section-title" id="secciones">Secciones principales</h2>
+
+      <section class="cards">
         <article class="card" id="tienda">
-          <span class="tag">Tienda</span>
+          <span class="tag orange">Tienda</span>
           <h3>Tequenovations</h3>
           <p>
-            Mi tienda principal para productos y pedidos. Desde aquí puedes ir directo a todo lo relacionado con mis ventas.
+            Mi tienda principal para productos y pedidos, conectada con todo lo relacionado con mis ventas.
           </p>
+          <a class="inline-link" href="https://www.tequenovations.com" target="_blank" rel="noopener">Abrir tienda</a>
+        </article>
+
+        <article class="card" id="podcast">
+          <span class="tag purple">Podcast</span>
+          <h3>Sabores y Relatos</h3>
+          <p>
+            Conversaciones, historias y experiencias alrededor de la cocina, la cultura y el emprendimiento.
+          </p>
+          <a class="inline-link" href="podcast.html">Ir al podcast</a>
         </article>
 
         <article class="card" id="ebooks">
           <span class="tag green">Ebooks</span>
           <h3>Próximamente</h3>
           <p>
-            Aquí publicaré ebooks y guías descargables con recetas, técnicas y consejos para cocina y negocio.
+            Aquí publicaré ebooks, guías y materiales descargables sobre cocina, técnica y negocio gastronómico.
           </p>
         </article>
 
@@ -469,44 +479,13 @@
           <span class="tag blue">Noticias</span>
           <h3>Noticias gastronómicas</h3>
           <p>
-            Esta sección mostrará actualizaciones automáticas sobre tendencias, cocina, restaurantes y cultura culinaria.
+            Esta sección mostrará futuras actualizaciones sobre tendencias, cocina y cultura culinaria.
           </p>
         </article>
-
-        <article class="card">
-          <span class="tag purple">Podcast</span>
-          <h3>Sabores y Relatos</h3>
-          <p>
-            Disponible en varias plataformas. Entra a la página del podcast para escuchar y ver los botones oficiales.
-          </p>
-          <div class="link-list">
-            <a href="podcast.html">Ir al podcast</a>
-          </div>
-        </article>
-      </section>
-
-      <section class="updates">
-        <div class="update-box">
-          <h3>Últimos contenidos</h3>
-          <ul>
-            <li>Recetas y tips de cocina venezolana.</li>
-            <li>Ebooks sobre cocina y negocio gastronómico.</li>
-            <li>Noticias del mundo culinario con actualización diaria.</li>
-          </ul>
-        </div>
-
-        <div class="update-box">
-          <h3>Próximos pasos</h3>
-          <ul>
-            <li>Crear páginas separadas para cada sección.</li>
-            <li>Agregar botones oficiales del podcast.</li>
-            <li>Automatizar las noticias con fuentes RSS y funciones.</li>
-          </ul>
-        </div>
       </section>
     </main>
 
-    <footer>
+    <footer class="footer">
       <p>© 2026 Simon Angel Cooks. Todos los derechos reservados.</p>
     </footer>
   </div>
