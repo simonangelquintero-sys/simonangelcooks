@@ -86,7 +86,10 @@ export default {
         });
       }
 
-      return env.ASSETS.fetch(request);
+      return json({
+        ok: false,
+        error: "Ruta no encontrada"
+      }, 404);
     } catch (error) {
       return json({
         ok: false,
