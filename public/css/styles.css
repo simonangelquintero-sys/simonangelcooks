@@ -39,14 +39,14 @@ a {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  backdrop-filter: blur(10px);
-  background: rgba(251, 247, 242, 0.9);
-  border-bottom: 1px solid rgba(111, 98, 86, 0.12);
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  background: rgba(251, 247, 242, 0.92);
+  border-bottom: 1px solid rgba(111, 98, 86, 0.14);
 }
 
 .site-header__inner {
-  max-width: var(--max-width);
+  max-width: 1120px;
   margin: 0 auto;
   padding: 18px 20px;
   display: flex;
@@ -56,39 +56,95 @@ a {
 }
 
 .site-brand {
+  text-decoration: none;
   font-family: "Cormorant Garamond", serif;
   font-size: 1.8rem;
   font-weight: 700;
-  text-decoration: none;
+  color: #2b2118;
   letter-spacing: 0.02em;
 }
 
 .site-nav {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 18px;
 }
 
 .site-nav a {
   text-decoration: none;
-  color: var(--muted);
-  font-size: 0.98rem;
+  color: #6f6256;
+  font-size: 0.96rem;
   font-weight: 600;
-  padding-bottom: 3px;
+  padding: 6px 0;
   border-bottom: 2px solid transparent;
-  transition: 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.site-nav a:hover,
+.site-nav a:hover {
+  color: #8c4b2f;
+}
+
 .site-nav a[aria-current="page"] {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  color: #8c4b2f;
+  border-bottom-color: #8c4b2f;
 }
 
 .news-page {
-  max-width: var(--max-width);
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 56px 20px 80px;
+  padding: 64px 20px 88px;
+}
+
+.news-hero {
+  max-width: 760px;
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: #8c4b2f;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.news-hero h1 {
+  margin: 0;
+  font-size: clamp(3rem, 5vw, 4.8rem);
+  line-height: 0.95;
+}
+
+.news-hero__lead {
+  margin-top: 18px;
+  max-width: 62ch;
+}
+
+.news-card {
+  padding: 32px;
+}
+
+.news-card h2 {
+  margin-bottom: 14px;
+}
+
+.news-card p {
+  margin-bottom: 14px;
+}
+
+@media (max-width: 720px) {
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-nav {
+    flex-wrap: wrap;
+  }
+
+  .news-page {
+    padding-top: 42px;
+  }
 }
 
 .news-hero {
