@@ -61,10 +61,7 @@ function renderLatest(items) {
 
 async function loadNews() {
   try {
-    const response = await fetch(
-      "https://simonangelcooks.simonangelquintero.workers.dev/api/news?ts=" + Date.now()
-    );
-
+    const response = await fetch("/api/news");
     if (!response.ok) {
       throw new Error(`Error HTTP: ${response.status}`);
     }
