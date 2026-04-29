@@ -1,48 +1,79 @@
 const NEWS_KEY = "latest-news";
-const REFRESH_SECRET = "CAMBIA_ESTE_SECRETO";
+const REFRESH_SECRET = "simon-news-2026-utah";
+
+const RSS_FEEDS = [
+  {
+    name: "Restaurant Business",
+    url: "https://restaurantbusinessonline.com/rss.xml",
+    category: "Restaurantes"
+  },
+  {
+    name: "QSR Magazine",
+    url: "https://www.qsrmagazine.com/rss.xml",
+    category: "Restaurantes"
+  },
+  {
+    name: "Food Business News",
+    url: "https://www.foodbusinessnews.net/rss",
+    category: "Ingredientes"
+  },
+  {
+    name: "Baking Business",
+    url: "https://www.bakingbusiness.com/rss",
+    category: "Panadería"
+  }
+];
 
 const DEFAULT_NEWS = {
   featured: {
     kicker: "Actualidad gastronómica",
-    title: "Cómo cambian las preferencias del consumidor en panadería artesanal",
+    title: "Panorama editorial gastronómico",
     summary:
-      "Un vistazo a cómo evolucionan los hábitos de compra, la valoración de ingredientes y la demanda de productos frescos y diferenciados.",
+      "La sección editorial se actualiza automáticamente con una selección de noticias del sector gastronómico y alimentario.",
     whyItMatters:
-      "Ayuda a negocios gastronómicos y panaderos a ajustar oferta, comunicación y estrategia de producto.",
-    publishedAt: "2026-04-28T19:30:00Z",
-    sourceName: "Fuente editorial de ejemplo",
-    sourceUrl: "https://simonangelcooks.com/noticias.html"
+      "Ayuda a mantener la sección activa mientras se consolidan fuentes y criterios editoriales.",
+    publishedAt: new Date().toISOString(),
+    sourceName: "Simon Angel Cooks",
+    sourceUrl: "https://simonangelcooks.com/noticias"
   },
-  latest: [
-    {
-      kicker: "Panadería",
-      title: "Tendencias en panadería artesanal",
-      summary:
-        "Cambios en consumo, técnicas y preferencias de productos horneados.",
-      publishedAt: "2026-04-28T15:00:00Z",
-      sourceName: "Simon Angel Cooks",
-      sourceUrl: "https://simonangelcooks.com/noticias.html"
-    },
-    {
-      kicker: "Ingredientes",
-      title: "Precios y abastecimiento de insumos",
-      summary:
-        "Panorama general de cómo se mueven costos clave para negocios de cocina y pastelería.",
-      publishedAt: "2026-04-27T18:00:00Z",
-      sourceName: "Simon Angel Cooks",
-      sourceUrl: "https://simonangelcooks.com/noticias.html"
-    },
-    {
-      kicker: "Restaurantes",
-      title: "Nuevas ideas en menús y experiencias",
-      summary:
-        "Enfoques que están destacando por creatividad y conexión con el cliente.",
-      publishedAt: "2026-04-26T16:30:00Z",
-      sourceName: "Simon Angel Cooks",
-      sourceUrl: "https://simonangelcooks.com/noticias.html"
-    }
-  ]
+  latest: []
 };
+
+const KEYWORDS = [
+  "food",
+  "restaurant",
+  "restaurants",
+  "bakery",
+  "baking",
+  "bread",
+  "pastry",
+  "menu",
+  "menus",
+  "chef",
+  "kitchen",
+  "dining",
+  "hospitality",
+  "ingredient",
+  "ingredients",
+  "beverage",
+  "beverages",
+  "snack",
+  "snacks",
+  "grocery",
+  "consumer",
+  "culinary",
+  "panadería",
+  "panaderia",
+  "pastelería",
+  "pasteleria",
+  "restaurante",
+  "restaurantes",
+  "gastronomía",
+  "gastronomia",
+  "alimentos",
+  "comida",
+  "insumos"
+];
 
 function jsonResponse(data, init = {}) {
   return Response.json(data, {
@@ -63,50 +94,209 @@ async function saveNews(env, payload) {
   await env.NEWS_KV.put(NEWS_KEY, JSON.stringify(payload));
 }
 
+function decodeXmlEntities(text = "") {
+  return text
+    .replace(/<!\[CDATA\[(.*?)\]\]>/gs, "$1")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function stripHtml(text = "") {
+  return decodeXmlEntities(text)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractTag(block, tagName) {
+  const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, "i");
+  const match = block.match(regex);
+  return match ? stripHtml(match[1]) : "";
+}
+
+function extractLink(block) {
+  const rssLink = block.match(/<link[^>]*>([\s\S]*?)<\/link>/i);
+  if (rssLink) return stripHtml(rssLink[1]);
+
+  const atomLink = block.match(/<link[^>]*href=["']([^"']+)["'][^>]*\/?>/i);
+  if (atomLink) return atomLink[1].trim();
+
+  return "";
+}
+
+function parseItemsFromXml(xml) {
+  const itemMatches = [...xml.matchAll(/<item\b[\s\S]*?<\/item>/gi)].map((m) => m[0]);
+  if (itemMatches.length > 0) {
+    return itemMatches.map(parseSingleItem).filter(Boolean);
+  }
+
+  const entryMatches = [...xml.matchAll(/<entry\b[\s\S]*?<\/entry>/gi)].map((m) => m[0]);
+  return entryMatches.map(parseSingleEntry).filter(Boolean);
+}
+
+function parseSingleItem(itemXml) {
+  const title = extractTag(itemXml, "title");
+  const link = extractLink(itemXml);
+  const description =
+    extractTag(itemXml, "description") ||
+    extractTag(itemXml, "content:encoded") ||
+    extractTag(itemXml, "content");
+  const pubDate =
+    extractTag(itemXml, "pubDate") ||
+    extractTag(itemXml, "dc:date") ||
+    extractTag(itemXml, "published") ||
+    extractTag(itemXml, "updated");
+
+  if (!title || !link) return null;
+
+  return {
+    title,
+    link,
+    description,
+    pubDate
+  };
+}
+
+function parseSingleEntry(entryXml) {
+  const title = extractTag(entryXml, "title");
+  const link = extractLink(entryXml);
+  const description =
+    extractTag(entryXml, "summary") ||
+    extractTag(entryXml, "content");
+  const pubDate =
+    extractTag(entryXml, "updated") ||
+    extractTag(entryXml, "published");
+
+  if (!title || !link) return null;
+
+  return {
+    title,
+    link,
+    description,
+    pubDate
+  };
+}
+
+function normalizeDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return new Date().toISOString();
+  return date.toISOString();
+}
+
+function includesKeyword(text = "") {
+  const normalized = text.toLowerCase();
+  return KEYWORDS.some((keyword) => normalized.includes(keyword));
+}
+
+function createSummary(text = "") {
+  const clean = stripHtml(text);
+  if (!clean) {
+    return "Resumen breve generado automáticamente a partir de la fuente original.";
+  }
+  return clean.length > 220 ? `${clean.slice(0, 217)}...` : clean;
+}
+
+function guessKicker(sourceCategory, title, description) {
+  const combined = `${title} ${description}`.toLowerCase();
+
+  if (combined.includes("bakery") || combined.includes("baking") || combined.includes("bread") || combined.includes("pan")) {
+    return "Panadería";
+  }
+
+  if (combined.includes("ingredient") || combined.includes("ingredients") || combined.includes("supply") || combined.includes("commodity")) {
+    return "Ingredientes";
+  }
+
+  if (combined.includes("restaurant") || combined.includes("menu") || combined.includes("dining") || combined.includes("qsr")) {
+    return "Restaurantes";
+  }
+
+  return sourceCategory || "Actualidad gastronómica";
+}
+
+function buildWhyItMatters(item) {
+  const text = `${item.title} ${item.description}`.toLowerCase();
+
+  if (text.includes("price") || text.includes("cost") || text.includes("commodity") || text.includes("supply")) {
+    return "Puede impactar costos, abastecimiento y toma de decisiones en negocios gastronómicos.";
+  }
+
+  if (text.includes("consumer") || text.includes("trend") || text.includes("demand")) {
+    return "Ayuda a entender cambios en preferencias del consumidor y oportunidades de adaptación.";
+  }
+
+  if (text.includes("restaurant") || text.includes("menu") || text.includes("operator")) {
+    return "Aporta contexto útil para operadores, propuestas de menú y experiencia del cliente.";
+  }
+
+  return "Aporta contexto útil para seguir tendencias relevantes en gastronomía, alimentos y hospitalidad.";
+}
+
+async function fetchFeed(feed) {
+  try {
+    const response = await fetch(feed.url, {
+      headers: {
+        "user-agent": "SimonAngelCooksNewsBot/1.0"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Feed error ${response.status}`);
+    }
+
+    const xml = await response.text();
+    const items = parseItemsFromXml(xml);
+
+    return items.map((item) => ({
+      sourceName: feed.name,
+      sourceUrl: item.link,
+      title: item.title,
+      description: item.description,
+      publishedAt: normalizeDate(item.pubDate),
+      category: guessKicker(feed.category, item.title, item.description)
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
 async function buildNewsPayload() {
-  const now = new Date().toISOString();
+  const feedResults = await Promise.all(RSS_FEEDS.map(fetchFeed));
+  const merged = feedResults.flat();
+
+  const filtered = merged
+    .filter((item) => includesKeyword(`${item.title} ${item.description}`))
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+  if (filtered.length === 0) {
+    return DEFAULT_NEWS;
+  }
+
+  const featuredItem = filtered[0];
+  const latestItems = filtered.slice(1, 4);
 
   return {
     featured: {
-      kicker: "Actualidad gastronómica",
-      title: "Panorama editorial automatizado de prueba",
-      summary:
-        "Este contenido viene desde el Worker API y puede reemplazarse luego por noticias reales seleccionadas y resumidas.",
-      whyItMatters:
-        "Valida la arquitectura completa con Worker, KV, cron y consumo público desde /api/news.",
-      publishedAt: now,
-      sourceName: "Simon Angel Cooks",
-      sourceUrl: "https://simonangelcooks.com/noticias.html"
+      kicker: featuredItem.category || "Actualidad gastronómica",
+      title: featuredItem.title,
+      summary: createSummary(featuredItem.description),
+      whyItMatters: buildWhyItMatters(featuredItem),
+      publishedAt: featuredItem.publishedAt,
+      sourceName: featuredItem.sourceName,
+      sourceUrl: featuredItem.sourceUrl
     },
-    latest: [
-      {
-        kicker: "Panadería",
-        title: "Actualización automática de ejemplo 1",
-        summary:
-          "Noticia semilla generada por el Worker para comprobar el flujo de publicación.",
-        publishedAt: now,
-        sourceName: "Simon Angel Cooks",
-        sourceUrl: "https://simonangelcooks.com/noticias.html"
-      },
-      {
-        kicker: "Ingredientes",
-        title: "Actualización automática de ejemplo 2",
-        summary:
-          "Segundo bloque de prueba para validar lectura desde Workers KV.",
-        publishedAt: now,
-        sourceName: "Simon Angel Cooks",
-        sourceUrl: "https://simonangelcooks.com/noticias.html"
-      },
-      {
-        kicker: "Restaurantes",
-        title: "Actualización automática de ejemplo 3",
-        summary:
-          "Tercer bloque de prueba, listo para sustituirse por contenido real.",
-        publishedAt: now,
-        sourceName: "Simon Angel Cooks",
-        sourceUrl: "https://simonangelcooks.com/noticias.html"
-      }
-    ]
+    latest: latestItems.map((item) => ({
+      kicker: item.category || "Actualidad gastronómica",
+      title: item.title,
+      summary: createSummary(item.description),
+      publishedAt: item.publishedAt,
+      sourceName: item.sourceName,
+      sourceUrl: item.sourceUrl
+    }))
   };
 }
 
