@@ -8,34 +8,97 @@
 </head>
 <body>
   <header class="site-header">
-  <div class="site-header__inner">
-    <a class="site-brand" href="index.html">Simon Angel Cooks</a>
+    <div class="site-header__inner">
+      <a class="site-brand" href="/index.html">Simon Angel Cooks</a>
 
-    <nav class="site-nav" aria-label="Principal">
-      <a href="index.html">Inicio</a>
-      <a href="noticias.html" aria-current="page">Noticias</a>
-      <a href="podcast.html">Podcast</a>
-    </nav>
-  </div>
-</header>
+      <nav class="site-nav" aria-label="Principal">
+        <a href="/index.html">Inicio</a>
+        <a href="/noticias.html" aria-current="page">Noticias</a>
+        <a href="/podcast.html">Podcast</a>
+      </nav>
+    </div>
+  </header>
 
   <main class="news-page">
     <section class="news-hero">
-  <p class="eyebrow">Sección editorial</p>
-  <h1>Noticias gastronómicas</h1>
-  <p class="news-hero__lead">
-    Resúmenes curados a partir de fuentes confiables, revisados antes de publicarse.
-  </p>
-</section>
+      <p class="eyebrow">Sección editorial</p>
+      <h1>Noticias gastronómicas</h1>
+      <p class="news-hero__lead">
+        Resúmenes curados a partir de fuentes confiables, revisados antes de publicarse.
+      </p>
+    </section>
 
-    <section class="news-list" id="newsList">
-      <article class="news-card">
-        <h2>Cargando noticias...</h2>
-        <p>Espera un momento mientras consultamos las publicaciones aprobadas.</p>
+    <section class="featured-news" aria-labelledby="destacada-title">
+      <div class="section-heading">
+        <p class="section-label">Destacada</p>
+        <h2 id="destacada-title">La noticia principal del día</h2>
+      </div>
+
+      <article class="news-card news-card--featured">
+        <div class="news-card__content">
+          <p class="news-card__kicker">Actualidad gastronómica</p>
+          <h3>Ejemplo de noticia gastronómica</h3>
+          <p>
+            Este es un resumen de prueba para validar la arquitectura inicial de noticias gastronómicas.
+          </p>
+          <p>
+            <strong>Por qué importa:</strong> Sirve para probar el flujo público del sitio antes de conectar automatizaciones y revisión editorial.
+          </p>
+
+          <div class="news-meta">
+            <span>Publicado: 21/4/2026, 11:42:01 p.m.</span>
+            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Fuente de ejemplo</a></span>
+          </div>
+        </div>
       </article>
+    </section>
+
+    <section class="news-feed" aria-labelledby="recientes-title">
+      <div class="section-heading">
+        <p class="section-label">Recientes</p>
+        <h2 id="recientes-title">Últimas publicaciones</h2>
+      </div>
+
+      <div class="news-grid" id="newsList">
+        <article class="news-card">
+          <p class="news-card__kicker">Panadería</p>
+          <h3>Tendencias en panadería artesanal</h3>
+          <p>
+            Un resumen breve sobre cambios en consumo, técnicas y preferencias de productos horneados.
+          </p>
+          <div class="news-meta">
+            <span>Publicado: 21/4/2026</span>
+            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Leer fuente</a></span>
+          </div>
+        </article>
+
+        <article class="news-card">
+          <p class="news-card__kicker">Ingredientes</p>
+          <h3>Precios y abastecimiento de insumos</h3>
+          <p>
+            Panorama general de cómo se mueven algunos costos clave para negocios de cocina y pastelería.
+          </p>
+          <div class="news-meta">
+            <span>Publicado: 20/4/2026</span>
+            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Leer fuente</a></span>
+          </div>
+        </article>
+
+        <article class="news-card">
+          <p class="news-card__kicker">Restaurantes</p>
+          <h3>Nuevas ideas en menús y experiencias</h3>
+          <p>
+            Una mirada rápida a enfoques que están destacando por creatividad y conexión con el cliente.
+          </p>
+          <div class="news-meta">
+            <span>Publicado: 19/4/2026</span>
+            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Leer fuente</a></span>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 
-  <script src="js/noticias.js"></script>
+  <script src="/js/noticias.js"></script>
 </body>
 </html>
