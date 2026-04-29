@@ -28,31 +28,38 @@
       </p>
     </section>
 
+    <!-- NOTICIA DESTACADA (rellena dinámicamente) -->
     <section class="featured-news" aria-labelledby="destacada-title">
       <div class="section-heading">
         <p class="section-label">Destacada</p>
         <h2 id="destacada-title">La noticia principal del día</h2>
       </div>
 
-      <article class="news-card news-card--featured">
+      <article class="news-card news-card--featured" id="featuredNews">
         <div class="news-card__content">
-          <p class="news-card__kicker">Actualidad gastronómica</p>
-          <h3>Ejemplo de noticia gastronómica</h3>
-          <p>
+          <p class="news-card__kicker" id="featuredKicker">Actualidad gastronómica</p>
+          <h3 id="featuredTitle">Ejemplo de noticia gastronómica</h3>
+          <p id="featuredSummary">
             Este es un resumen de prueba para validar la arquitectura inicial de noticias gastronómicas.
           </p>
-          <p>
+          <p id="featuredWhyItMatters">
             <strong>Por qué importa:</strong> Sirve para probar el flujo público del sitio antes de conectar automatizaciones y revisión editorial.
           </p>
 
           <div class="news-meta">
-            <span>Publicado: 21/4/2026, 11:42:01 p.m.</span>
-            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Fuente de ejemplo</a></span>
+            <span id="featuredDate">Publicado: 21/4/2026, 11:42:01 p.m.</span>
+            <span>
+              Fuente:
+              <a id="featuredSource" href="#" target="_blank" rel="noopener noreferrer">
+                Fuente de ejemplo
+              </a>
+            </span>
           </div>
         </div>
       </article>
     </section>
 
+    <!-- LISTA DE RECIENTES (rellena dinámicamente) -->
     <section class="news-feed" aria-labelledby="recientes-title">
       <div class="section-heading">
         <p class="section-label">Recientes</p>
@@ -60,41 +67,7 @@
       </div>
 
       <div class="news-grid" id="newsList">
-        <article class="news-card">
-          <p class="news-card__kicker">Panadería</p>
-          <h3>Tendencias en panadería artesanal</h3>
-          <p>
-            Un resumen breve sobre cambios en consumo, técnicas y preferencias de productos horneados.
-          </p>
-          <div class="news-meta">
-            <span>Publicado: 21/4/2026</span>
-            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Leer fuente</a></span>
-          </div>
-        </article>
-
-        <article class="news-card">
-          <p class="news-card__kicker">Ingredientes</p>
-          <h3>Precios y abastecimiento de insumos</h3>
-          <p>
-            Panorama general de cómo se mueven algunos costos clave para negocios de cocina y pastelería.
-          </p>
-          <div class="news-meta">
-            <span>Publicado: 20/4/2026</span>
-            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Leer fuente</a></span>
-          </div>
-        </article>
-
-        <article class="news-card">
-          <p class="news-card__kicker">Restaurantes</p>
-          <h3>Nuevas ideas en menús y experiencias</h3>
-          <p>
-            Una mirada rápida a enfoques que están destacando por creatividad y conexión con el cliente.
-          </p>
-          <div class="news-meta">
-            <span>Publicado: 19/4/2026</span>
-            <span>Fuente: <a href="#" target="_blank" rel="noopener noreferrer">Leer fuente</a></span>
-          </div>
-        </article>
+        <!-- Aquí se insertan las tarjetas de noticias desde noticias.js -->
       </div>
     </section>
   </main>
