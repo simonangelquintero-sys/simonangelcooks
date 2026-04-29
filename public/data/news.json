@@ -1,0 +1,37 @@
+{
+  "featured": {
+    "kicker": "Actualidad gastronómica",
+    "title": "Cómo cambian las preferencias del consumidor en panadería artesanal",
+    "summary": "Un vistazo a cómo evolucionan los hábitos de compra, la valoración de ingredientes y la demanda de productos frescos y diferenciados.",
+    "whyItMatters": "Ayuda a negocios gastronómicos y panaderos a ajustar oferta, comunicación y estrategia de producto.",
+    "publishedAt": "2026-04-28T19:30:00Z",
+    "sourceName": "Fuente editorial de ejemplo",
+    "sourceUrl": "https://ejemplo.com/noticia-principal"
+  },
+  "latest": [
+    {
+      "kicker": "Panadería",
+      "title": "Tendencias en panadería artesanal",
+      "summary": "Cambios en consumo, técnicas y preferencias de productos horneados.",
+      "publishedAt": "2026-04-28T15:00:00Z",
+      "sourceName": "Leer fuente",
+      "sourceUrl": "https://ejemplo.com/panaderia"
+    },
+    {
+      "kicker": "Ingredientes",
+      "title": "Precios y abastecimiento de insumos",
+      "summary": "Panorama general de cómo se mueven costos clave para negocios de cocina y pastelería.",
+      "publishedAt": "2026-04-27T18:00:00Z",
+      "sourceName": "Leer fuente",
+      "sourceUrl": "https://ejemplo.com/insumos"
+    },
+    {
+      "kicker": "Restaurantes",
+      "title": "Nuevas ideas en menús y experiencias",
+      "summary": "Enfoques que están destacando por creatividad y conexión con el cliente.",
+      "publishedAt": "2026-04-26T16:30:00Z",
+      "sourceName": "Leer fuente",
+      "sourceUrl": "https://ejemplo.com/restaurantes"
+    }
+  ]
+}
