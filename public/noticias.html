@@ -1,77 +1,596 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Noticias gastronómicas de Simon Angel Cooks: resúmenes curados de fuentes confiables sobre cocina, tendencias y cultura culinaria."
+  />
   <title>Noticias gastronómicas | Simon Angel Cooks</title>
-  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    :root{
+      --bg:#f7f3ed;
+      --bg-soft:#fbf8f3;
+      --card:#fffdfa;
+      --card-2:#fcf8f2;
+      --text:#2f241d;
+      --muted:#6d5d52;
+      --line:rgba(83, 58, 38, .14);
+      --line-strong:rgba(83, 58, 38, .22);
+      --accent:#8f5a33;
+      --accent-soft:#efe2d5;
+      --shadow:0 18px 40px rgba(70, 45, 24, .08);
+      --radius:24px;
+      --radius-sm:16px;
+      --max:1120px;
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Georgia, "Times New Roman", serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(143,90,51,.09), transparent 24%),
+        linear-gradient(180deg, #faf7f2 0%, #f7f3ed 55%, #f4efe8 100%);
+      line-height:1.65;
+    }
+
+    img{
+      max-width:100%;
+      height:auto;
+      display:block;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .site-header{
+      position:sticky;
+      top:10px;
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:16px 18px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(250,247,242,.84);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+
+    .brand{
+      min-width:0;
+    }
+
+    .brand a{
+      display:inline-block;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:clamp(1.7rem, 2vw, 2rem);
+      font-weight:500;
+      letter-spacing:-.02em;
+      line-height:1.05;
+    }
+
+    .brand p{
+      margin:4px 0 0;
+      font-size:.96rem;
+      color:var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .menu-toggle{
+      display:none;
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      min-height:44px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .nav a{
+      padding:10px 14px;
+      border-radius:999px;
+      color:var(--muted);
+      transition:.2s ease;
+      font-size:.96rem;
+    }
+
+    .nav a:hover,
+    .nav a.active{
+      color:var(--text);
+      background:rgba(143,90,51,.08);
+    }
+
+    .page-hero{
+      padding:56px 0 24px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      margin-bottom:14px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:.78rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--accent);
+      font-weight:700;
+    }
+
+    .page-hero h2{
+      margin:0 0 14px;
+      font-size:clamp(2.8rem, 6vw, 5rem);
+      line-height:.98;
+      letter-spacing:-.03em;
+      max-width:10ch;
+      font-weight:600;
+    }
+
+    .page-hero p{
+      margin:0;
+      max-width:62ch;
+      color:var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:1.04rem;
+    }
+
+    .section-head{
+      margin:28px 0 14px;
+    }
+
+    .section-head .label{
+      display:block;
+      margin-bottom:8px;
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.76rem;
+      color:var(--accent);
+      font-weight:700;
+    }
+
+    .section-head h3{
+      margin:0;
+      font-size:clamp(1.8rem, 3vw, 2.8rem);
+      line-height:1.05;
+      font-weight:600;
+      letter-spacing:-.02em;
+    }
+
+    .featured-card{
+      background:rgba(255,253,250,.92);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      min-height:220px;
+    }
+
+    .news-kicker{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:7px 12px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:.78rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+
+    .featured-title,
+    .news-card h4{
+      margin:0 0 10px;
+      line-height:1.08;
+      letter-spacing:-.02em;
+      font-weight:600;
+    }
+
+    .featured-title{
+      font-size:clamp(2rem, 4vw, 3.1rem);
+      max-width:18ch;
+    }
+
+    .featured-summary,
+    .news-card p{
+      margin:0;
+      color:var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:1rem;
+    }
+
+    .featured-summary{
+      max-width:74ch;
+    }
+
+    .news-why{
+      margin-top:14px;
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--text);
+      font-size:.98rem;
+    }
+
+    .news-why strong{
+      color:var(--text);
+    }
+
+    .news-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 18px;
+      margin-top:18px;
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .news-meta a{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    .news-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px;
+      margin-top:8px;
+    }
+
+    .news-card{
+      background:rgba(255,253,250,.78);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      min-height:260px;
+    }
+
+    .news-card h4{
+      font-size:1.55rem;
+      margin-top:2px;
+    }
+
+    .news-card p{
+      font-size:.97rem;
+    }
+
+    .news-card .news-meta{
+      margin-top:auto;
+      padding-top:16px;
+    }
+
+    .news-card .read-link{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:14px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line-strong);
+      background:rgba(143,90,51,.05);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:.92rem;
+      font-weight:700;
+      color:var(--accent);
+      width:max-content;
+      transition:.2s ease;
+    }
+
+    .news-card .read-link:hover{
+      background:rgba(143,90,51,.10);
+      transform:translateY(-1px);
+    }
+
+    .empty-state{
+      padding:24px;
+      border:1px dashed var(--line-strong);
+      border-radius:22px;
+      background:rgba(255,255,255,.35);
+      color:var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .footer{
+      margin-top:42px;
+      padding:22px 0 8px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:.92rem;
+    }
+
+    @media (max-width: 980px){
+      .news-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .page-hero h2{
+        max-width:none;
+      }
+
+      .featured-title{
+        max-width:none;
+      }
+    }
+
+    @media (max-width: 720px){
+      .wrap{
+        padding:16px;
+      }
+
+      .site-header{
+        align-items:flex-start;
+      }
+
+      .menu-toggle{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+      }
+
+      .nav{
+        display:none;
+        width:100%;
+        flex-direction:column;
+        align-items:stretch;
+        margin-top:8px;
+      }
+
+      .nav.open{
+        display:flex;
+      }
+
+      .nav a{
+        width:100%;
+        text-align:center;
+      }
+
+      .page-hero{
+        padding:36px 0 16px;
+      }
+
+      .page-hero h2{
+        font-size:2.9rem;
+      }
+
+      .featured-card,
+      .news-card{
+        padding:18px;
+      }
+
+      .news-grid{
+        grid-template-columns:1fr;
+      }
+
+      .featured-title{
+        font-size:2.1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="site-header__inner">
-      <a class="site-brand" href="/index.html">Simon Angel Cooks</a>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <a href="/">
+          <h1>Simon Angel Cooks</h1>
+        </a>
+        <p>Cocina, cultura y contenido gastronómico</p>
+      </div>
 
-      <nav class="site-nav" aria-label="Principal">
-        <a href="/index.html">Inicio</a>
-        <a href="/noticias.html" aria-current="page">Noticias</a>
-        <a href="/podcast.html">Podcast</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰ Menú</button>
+
+      <nav class="nav" id="mainNav" aria-label="Navegación principal">
+        <a href="/">Inicio</a>
+        <a href="/noticias" class="active">Noticias</a>
+        <a href="/podcast">Podcast</a>
       </nav>
-    </div>
-  </header>
+    </header>
 
-  <main class="news-page">
-    <section class="news-hero">
-      <p class="eyebrow">Sección editorial</p>
-      <h1>Noticias gastronómicas</h1>
-      <p class="news-hero__lead">
-        Resúmenes curados a partir de fuentes confiables, revisados antes de publicarse.
-      </p>
-    </section>
+    <main class="news-page">
+      <section class="page-hero">
+        <span class="eyebrow">Sección editorial</span>
+        <h2>Noticias gastronómicas</h2>
+        <p>
+          Resúmenes curados a partir de fuentes confiables, revisados antes de publicarse.
+        </p>
+      </section>
 
-    <!-- NOTICIA DESTACADA (rellena dinámicamente) -->
-    <section class="featured-news" aria-labelledby="destacada-title">
-      <div class="section-heading">
-        <p class="section-label">Destacada</p>
-        <h2 id="destacada-title">La noticia principal del día</h2>
-      </div>
-
-      <article class="news-card news-card--featured" id="featuredNews">
-        <div class="news-card__content">
-          <p class="news-card__kicker" id="featuredKicker">Actualidad gastronómica</p>
-          <h3 id="featuredTitle">Ejemplo de noticia gastronómica</h3>
-          <p id="featuredSummary">
-            Este es un resumen de prueba para validar la arquitectura inicial de noticias gastronómicas.
-          </p>
-          <p id="featuredWhyItMatters">
-            <strong>Por qué importa:</strong> Sirve para probar el flujo público del sitio antes de conectar automatizaciones y revisión editorial.
-          </p>
-
-          <div class="news-meta">
-            <span id="featuredDate">Publicado: 21/4/2026, 11:42:01 p.m.</span>
-            <span>
-              Fuente:
-              <a id="featuredSource" href="#" target="_blank" rel="noopener noreferrer">
-                Fuente de ejemplo
-              </a>
-            </span>
-          </div>
+      <section class="featured-news" aria-labelledby="destacada-title">
+        <div class="section-head">
+          <span class="label">Destacada</span>
+          <h3 id="destacada-title">La noticia principal del día</h3>
         </div>
-      </article>
-    </section>
 
-    <!-- LISTA DE RECIENTES (rellena dinámicamente) -->
-    <section class="news-feed" aria-labelledby="recientes-title">
-      <div class="section-heading">
-        <p class="section-label">Recientes</p>
-        <h2 id="recientes-title">Últimas publicaciones</h2>
-      </div>
+        <article class="featured-card" id="featuredNews">
+          <span class="news-kicker">Actualidad gastronómica</span>
+          <h4 class="featured-title">Cargando noticia destacada...</h4>
+          <p class="featured-summary">
+            Estamos preparando la selección editorial más reciente.
+          </p>
+        </article>
+      </section>
 
-      <div class="news-grid" id="newsList">
-        <!-- Aquí se insertan las tarjetas de noticias desde noticias.js -->
-      </div>
-    </section>
-  </main>
+      <section class="news-feed" aria-labelledby="recientes-title">
+        <div class="section-head">
+          <span class="label">Recientes</span>
+          <h3 id="recientes-title">Últimas publicaciones</h3>
+        </div>
 
-  <script src="/js/noticias.js"></script>
+        <div class="news-grid" id="newsList">
+          <div class="empty-state">Cargando publicaciones recientes...</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 Simon Angel Cooks. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    const featuredNews = document.getElementById('featuredNews');
+    const newsList = document.getElementById('newsList');
+
+    menuToggle?.addEventListener('click', () => {
+      mainNav.classList.toggle('open');
+      const isOpen = mainNav.classList.contains('open');
+      menuToggle.textContent = isOpen ? '✕ Cerrar' : '☰ Menú';
+      menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+    });
+
+    mainNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 720) {
+          mainNav.classList.remove('open');
+          menuToggle.textContent = '☰ Menú';
+          menuToggle.setAttribute('aria-label', 'Abrir menú');
+        }
+      });
+    });
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function formatDate(value) {
+      if (!value) return 'Fecha no disponible';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+
+      return new Intl.DateTimeFormat('es-US', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      }).format(date);
+    }
+
+    function renderFeatured(item) {
+      if (!item) {
+        featuredNews.innerHTML = `
+          <span class="news-kicker">Actualidad gastronómica</span>
+          <h4 class="featured-title">No hay noticia destacada disponible</h4>
+          <p class="featured-summary">La selección editorial se actualizará pronto.</p>
+        `;
+        return;
+      }
+
+      featuredNews.innerHTML = `
+        <span class="news-kicker">${escapeHtml(item.category || 'Actualidad gastronómica')}</span>
+        <h4 class="featured-title">${escapeHtml(item.title || 'Sin título')}</h4>
+        <p class="featured-summary">${escapeHtml(item.summary || 'Sin resumen disponible.')}</p>
+        ${
+          item.why_it_matters
+            ? `<p class="news-why"><strong>Por qué importa:</strong> ${escapeHtml(item.why_it_matters)}</p>`
+            : ''
+        }
+        <div class="news-meta">
+          <span>Publicado: ${escapeHtml(formatDate(item.published_at || item.pubDate || item.date))}</span>
+          ${
+            item.source_name || item.source
+              ? `<span>Fuente: <a href="${escapeHtml(item.url || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.source_name || item.source)}</a></span>`
+              : ''
+          }
+        </div>
+      `;
+    }
+
+    function renderLatest(items) {
+      if (!Array.isArray(items) || !items.length) {
+        newsList.innerHTML = '<div class="empty-state">Todavía no hay publicaciones recientes disponibles.</div>';
+        return;
+      }
+
+      newsList.innerHTML = items.map(item => `
+        <article class="news-card">
+          <span class="news-kicker">${escapeHtml(item.category || 'Noticias')}</span>
+          <h4>${escapeHtml(item.title || 'Sin título')}</h4>
+          <p>${escapeHtml(item.summary || 'Sin resumen disponible.')}</p>
+          <a class="read-link" href="${escapeHtml(item.url || '#')}" target="_blank" rel="noopener noreferrer">
+            Leer fuente
+          </a>
+          <div class="news-meta">
+            <span>${escapeHtml(formatDate(item.published_at || item.pubDate || item.date))}</span>
+            <span>${escapeHtml(item.source_name || item.source || 'Fuente externa')}</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function loadNews() {
+      try {
+        const response = await fetch('/api/news');
+
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderFeatured(data.featured);
+        renderLatest(data.latest);
+      } catch (error) {
+        console.error('No se pudieron cargar las noticias:', error);
+
+        featuredNews.innerHTML = `
+          <span class="news-kicker">Actualidad gastronómica</span>
+          <h4 class="featured-title">No se pudieron cargar las noticias</h4>
+          <p class="featured-summary">
+            Hubo un problema al obtener la selección editorial. Intenta recargar en unos minutos.
+          </p>
+        `;
+
+        newsList.innerHTML = `
+          <div class="empty-state">
+            No fue posible cargar las publicaciones recientes en este momento.
+          </div>
+        `;
+      }
+    }
+
+    loadNews();
+  </script>
 </body>
 </html>
