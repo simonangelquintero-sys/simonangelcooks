@@ -1,6 +1,4 @@
-// ===============================
-// Selección de elementos del DOM
-// ===============================
+
 const newsList = document.getElementById("newsList");
 
 const featuredKicker = document.getElementById("featuredKicker");
@@ -10,17 +8,31 @@ const featuredWhyItMatters = document.getElementById("featuredWhyItMatters");
 const featuredDate = document.getElementById("featuredDate");
 const featuredSource = document.getElementById("featuredSource");
 
-// Validación básica de elementos críticos
 if (!newsList) {
   console.error("Elemento #newsList no encontrado en el DOM");
 }
 
-// ===============================
-// Utils
-// ===============================
-
 // Optimizado (evita crear DOMParser cada vez)
 const textarea = document.createElement("textarea");
+function decodeHtmlEntities(value) {
+  if (typeof value !== "string") return value ?? "";
+
+  const textarea = document.createElement("textarea");
+
+  let decoded = value;
+  let previous;
+
+  // Decodifica hasta que no haya cambios (máx 3 veces para seguridad)
+  let count = 0;
+  do {
+    previous = decoded;
+    textarea.innerHTML = decoded;
+    decoded = textarea.value;
+    count++;
+  } while (decoded !== previous && count < 3);
+
+  return decoded;
+}
 
 function decodeHtmlEntities(value) {
   if (typeof value !== "string") return value ?? "";
