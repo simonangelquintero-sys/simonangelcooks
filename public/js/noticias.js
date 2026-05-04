@@ -9,18 +9,10 @@ const featuredSource = document.getElementById("featuredSource");
 
 function decodeHtmlEntities(value) {
   if (typeof value !== "string") return value ?? "";
-
-  const textarea = document.createElement("textarea");
-  let decoded = value;
-  let previous = "";
-
-  while (decoded !== previous) {
-    previous = decoded;
-    textarea.innerHTML = decoded;
-    decoded = textarea.value;
-  }
-
-  return decoded;
+  
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(value, "text/html");
+  return doc.documentElement.textContent || value;
 }
 
 function formatDate(dateString) {
@@ -41,13 +33,13 @@ function createNewsCard(item) {
 
   const kicker = document.createElement("p");
   kicker.className = "news-card__kicker";
-  kicker.textContent = decodeHtmlEntities(item.kicker ?? "Actualidad gastronómica");
+  kicker.textContent = decodeHtmlEntities(item.kicker || "Actualidad gastronómica");
 
   const title = document.createElement("h3");
-  title.textContent = decodeHtmlEntities(item.title ?? "Sin título");
+  title.textContent = decodeHtmlEntities(item.title || "Sin título");
 
   const summary = document.createElement("p");
-  summary.textContent = decodeHtmlEntities(item.summary ?? "");
+  summary.textContent = decodeHtmlEntities(item.summary || "");
 
   const meta = document.createElement("div");
   meta.className = "news-meta";
@@ -59,10 +51,10 @@ function createNewsCard(item) {
   sourceWrap.append("Fuente: ");
 
   const sourceLink = document.createElement("a");
-  sourceLink.href = item.sourceUrl ?? "#";
+  sourceLink.href = item.sourceUrl || "#";
   sourceLink.target = "_blank";
   sourceLink.rel = "noopener noreferrer";
-  sourceLink.textContent = decodeHtmlEntities(item.sourceName ?? "Leer fuente");
+  sourceLink.textContent = decodeHtmlEntities(item.sourceName || "Fuente externa");
 
   sourceWrap.appendChild(sourceLink);
   meta.appendChild(published);
@@ -80,13 +72,13 @@ function renderFeatured(featured) {
   if (!featured) return;
 
   featuredKicker.textContent = decodeHtmlEntities(
-    featured.kicker ?? "Actualidad gastronómica"
+    featured.kicker || "Actualidad gastronómica"
   );
   featuredTitle.textContent = decodeHtmlEntities(
-    featured.title ?? "Sin título"
+    featured.title || "Sin título"
   );
   featuredSummary.textContent = decodeHtmlEntities(
-    featured.summary ?? ""
+    featured.summary || ""
   );
 
   featuredWhyItMatters.innerHTML = "";
@@ -95,14 +87,14 @@ function renderFeatured(featured) {
   featuredWhyItMatters.appendChild(strong);
   featuredWhyItMatters.append(" ");
   featuredWhyItMatters.append(
-    decodeHtmlEntities(featured.whyItMatters ?? "")
+    decodeHtmlEntities(featured.whyItMatters || "")
   );
 
   featuredDate.textContent = `Publicado: ${formatDate(featured.publishedAt)}`;
   featuredSource.textContent = decodeHtmlEntities(
-    featured.sourceName ?? "Fuente"
+    featured.sourceName || "Fuente"
   );
-  featuredSource.href = featured.sourceUrl ?? "#";
+  featuredSource.href = featured.sourceUrl || "#";
 }
 
 function renderLatest(items) {
@@ -132,7 +124,7 @@ async function loadNews() {
       newsList.innerHTML = `
         <article class="news-card">
           <p class="news-card__kicker">Aviso</p>
-          <h3>No se pudieron cargar las noticias.</h3>
+          <h3>No se pudieron cargar las noticias</h3>
           <p>Intenta nuevamente en unos minutos.</p>
         </article>
       `;
