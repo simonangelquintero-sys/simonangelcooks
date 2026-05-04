@@ -1,3 +1,6 @@
+// ===============================
+// Selección de elementos del DOM
+// ===============================
 const newsList = document.getElementById("newsList");
 
 const featuredKicker = document.getElementById("featuredKicker");
@@ -7,12 +10,32 @@ const featuredWhyItMatters = document.getElementById("featuredWhyItMatters");
 const featuredDate = document.getElementById("featuredDate");
 const featuredSource = document.getElementById("featuredSource");
 
+// Validación básica de elementos críticos
+if (!newsList) {
+  console.error("Elemento #newsList no encontrado en el DOM");
+}
+
+// ===============================
+// Utils
+// ===============================
+
+// Optimizado (evita crear DOMParser cada vez)
+const textarea = document.createElement("textarea");
+
 function decodeHtmlEntities(value) {
   if (typeof value !== "string") return value ?? "";
-  
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(value, "text/html");
-  return doc.documentElement.textContent || value;
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
+// Sanitiza URLs para evitar problemas de seguridad
+function safeUrl(url) {
+  try {
+    const parsed = new URL(url, window.location.origin);
+    return parsed.href;
+  } catch {
+    return "#";
+  }
 }
 
 function formatDate(dateString) {
@@ -27,6 +50,9 @@ function formatDate(dateString) {
   }).format(date);
 }
 
+// ===============================
+// Crear tarjeta de noticia
+// ===============================
 function createNewsCard(item) {
   const article = document.createElement("article");
   article.className = "news-card";
@@ -51,12 +77,14 @@ function createNewsCard(item) {
   sourceWrap.append("Fuente: ");
 
   const sourceLink = document.createElement("a");
-  sourceLink.href = item.sourceUrl || "#";
+  sourceLink.href = safeUrl(item.sourceUrl);
   sourceLink.target = "_blank";
   sourceLink.rel = "noopener noreferrer";
   sourceLink.textContent = decodeHtmlEntities(item.sourceName || "Fuente externa");
+  sourceLink.setAttribute("aria-label", "Leer fuente original");
 
   sourceWrap.appendChild(sourceLink);
+
   meta.appendChild(published);
   meta.appendChild(sourceWrap);
 
@@ -68,22 +96,32 @@ function createNewsCard(item) {
   return article;
 }
 
+// ===============================
+// Render destacado
+// ===============================
 function renderFeatured(featured) {
   if (!featured) return;
+
+  if (!featuredTitle || !featuredSummary) return;
 
   featuredKicker.textContent = decodeHtmlEntities(
     featured.kicker || "Actualidad gastronómica"
   );
+
   featuredTitle.textContent = decodeHtmlEntities(
     featured.title || "Sin título"
   );
+
   featuredSummary.textContent = decodeHtmlEntities(
     featured.summary || ""
   );
 
-  featuredWhyItMatters.innerHTML = "";
+  // Limpieza sin innerHTML
+  featuredWhyItMatters.replaceChildren();
+
   const strong = document.createElement("strong");
   strong.textContent = "Por qué importa:";
+
   featuredWhyItMatters.appendChild(strong);
   featuredWhyItMatters.append(" ");
   featuredWhyItMatters.append(
@@ -91,22 +129,102 @@ function renderFeatured(featured) {
   );
 
   featuredDate.textContent = `Publicado: ${formatDate(featured.publishedAt)}`;
+
   featuredSource.textContent = decodeHtmlEntities(
     featured.sourceName || "Fuente"
   );
-  featuredSource.href = featured.sourceUrl || "#";
+  featuredSource.href = safeUrl(featured.sourceUrl);
 }
 
+// ===============================
+// Render lista de noticias
+// ===============================
 function renderLatest(items) {
   if (!newsList || !Array.isArray(items)) return;
 
-  newsList.innerHTML = "";
+  newsList.replaceChildren();
+
+  if (items.length === 0) {
+    const emptyMsg = document.createElement("p");
+    emptyMsg.textContent = "No hay noticias disponibles.";
+    newsList.appendChild(emptyMsg);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
   items.forEach((item) => {
-    newsList.appendChild(createNewsCard(item));
+    fragment.appendChild(createNewsCard(item));
   });
+
+  newsList.appendChild(fragment);
 }
 
+// ===============================
+// Estado de error
+// ===============================
+function renderErrorState() {
+  if (newsList) {
+    newsList.replaceChildren();
+
+    const article = document.createElement("article");
+    article.className = "news-card";
+
+    const kicker = document.createElement("p");
+    kicker.className = "news-card__kicker";
+    kicker.textContent = "Aviso";
+
+    const title = document.createElement("h3");
+    title.textContent = "No se pudieron cargar las noticias";
+
+    const msg = document.createElement("p");
+    msg.textContent = "Intenta nuevamente en unos minutos.";
+
+    article.appendChild(kicker);
+    article.appendChild(title);
+    article.appendChild(msg);
+
+    newsList.appendChild(article);
+  }
+
+  if (featuredTitle) {
+    featuredTitle.textContent = "Noticias no disponibles temporalmente";
+  }
+  if (featuredSummary) {
+    featuredSummary.textContent =
+      "Hubo un problema al cargar el contenido más reciente.";
+  }
+  if (featuredWhyItMatters) {
+    featuredWhyItMatters.textContent = "";
+  }
+  if (featuredDate) {
+    featuredDate.textContent = "";
+  }
+  if (featuredSource) {
+    featuredSource.textContent = "";
+    featuredSource.removeAttribute("href");
+  }
+}
+
+// ===============================
+// Estado de carga
+// ===============================
+function renderLoading() {
+  if (!newsList) return;
+
+  newsList.replaceChildren();
+
+  const loading = document.createElement("p");
+  loading.textContent = "Cargando noticias...";
+  newsList.appendChild(loading);
+}
+
+// ===============================
+// Fetch principal
+// ===============================
 async function loadNews() {
+  renderLoading();
+
   try {
     const response = await fetch("/api/news");
 
@@ -115,39 +233,17 @@ async function loadNews() {
     }
 
     const data = await response.json();
+
     renderFeatured(data.featured);
     renderLatest(data.latest);
+
   } catch (error) {
     console.error("No se pudieron cargar las noticias:", error);
-
-    if (newsList) {
-      newsList.innerHTML = `
-        <article class="news-card">
-          <p class="news-card__kicker">Aviso</p>
-          <h3>No se pudieron cargar las noticias</h3>
-          <p>Intenta nuevamente en unos minutos.</p>
-        </article>
-      `;
-    }
-
-    if (featuredTitle) {
-      featuredTitle.textContent = "Noticias no disponibles temporalmente";
-    }
-    if (featuredSummary) {
-      featuredSummary.textContent =
-        "Hubo un problema al cargar el contenido más reciente.";
-    }
-    if (featuredWhyItMatters) {
-      featuredWhyItMatters.textContent = "";
-    }
-    if (featuredDate) {
-      featuredDate.textContent = "";
-    }
-    if (featuredSource) {
-      featuredSource.textContent = "";
-      featuredSource.removeAttribute("href");
-    }
+    renderErrorState();
   }
 }
 
+// ===============================
+// Inicialización
+// ===============================
 loadNews();
