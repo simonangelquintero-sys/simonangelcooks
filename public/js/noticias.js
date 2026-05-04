@@ -7,14 +7,6 @@ const featuredWhyItMatters = document.getElementById("featuredWhyItMatters");
 const featuredDate = document.getElementById("featuredDate");
 const featuredSource = document.getElementById("featuredSource");
 
-const decodeHtmlEntities = (() => {
-  const textarea = document.createElement("textarea");
-  return (value) => {
-    if (typeof value !== "string") return value ?? "";
-    textarea.innerHTML = value;
-    return textarea.value;
-  };
-})();
 function decodeHtmlEntities(value) {
   if (typeof value !== "string") return value ?? "";
 
@@ -30,6 +22,7 @@ function decodeHtmlEntities(value) {
 
   return decoded;
 }
+
 function formatDate(dateString) {
   if (!dateString) return "Fecha no disponible";
 
