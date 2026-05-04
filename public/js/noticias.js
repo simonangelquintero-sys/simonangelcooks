@@ -15,7 +15,21 @@ const decodeHtmlEntities = (() => {
     return textarea.value;
   };
 })();
+function decodeHtmlEntities(value) {
+  if (typeof value !== "string") return value ?? "";
 
+  const textarea = document.createElement("textarea");
+  let decoded = value;
+  let previous = "";
+
+  while (decoded !== previous) {
+    previous = decoded;
+    textarea.innerHTML = decoded;
+    decoded = textarea.value;
+  }
+
+  return decoded;
+}
 function formatDate(dateString) {
   if (!dateString) return "Fecha no disponible";
 
