@@ -29,7 +29,7 @@ const DEFAULT_NEWS = {
     kicker: "Actualidad gastronómica",
     title: "Panorama editorial gastronómico",
     summary:
-      "La sección editorial se actualiza automáticamente con una selección de noticias del sector gastronómico y alimentario.",
+      "La sección editorial se actualiza automáticamente con una selección de noticias del sector gastronómico y alimentario.PROBANDO",
     whyItMatters:
       "Ayuda a mantener la sección activa mientras se consolidan fuentes y criterios editoriales.",
     publishedAt: new Date().toISOString(),
