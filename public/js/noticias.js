@@ -7,14 +7,33 @@ const featuredWhyItMatters = document.getElementById("featuredWhyItMatters");
 const featuredDate = document.getElementById("featuredDate");
 const featuredSource = document.getElementById("featuredSource");
 
-const decodeHtmlEntities = (() => {
+function decodeHtmlEntities(value) {
+  if (typeof value !== "string") return value ?? "";
+
   const textarea = document.createElement("textarea");
-  return (value) => {
-    if (typeof value !== "string") return value ?? "";
-    textarea.innerHTML = value;
-    return textarea.value;
-  };
-})();
+  let decoded = value;
+  let previous = "";
+
+  while (decoded !== previous) {
+    previous = decoded;
+    textarea.innerHTML = decoded;
+    decoded = textarea.value;
+  }
+
+  return decoded;
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "Fecha no disponible";
+
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return "Fecha no disponible";
+
+  return new Intl.DateTimeFormat("es-ES", {
+    dateStyle: "short",
+    timeStyle: "short"
+  }).format(date);
+}
 function decodeHtmlEntities(value) {
   if (typeof value !== "string") return value ?? "";
 
