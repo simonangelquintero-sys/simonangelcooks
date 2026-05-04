@@ -132,7 +132,7 @@ async function loadNews() {
       newsList.innerHTML = `
         <article class="news-card">
           <p class="news-card__kicker">Aviso</p>
-          <h3>No se pudieron cargar las noticias</h3>
+          <h3>No se pudieron cargar las noticias.</h3>
           <p>Intenta nuevamente en unos minutos.</p>
         </article>
       `;
