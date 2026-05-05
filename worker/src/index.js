@@ -94,19 +94,28 @@ async function saveNews(env, payload) {
   await env.NEWS_KV.put(NEWS_KEY, JSON.stringify(payload));
 }
 
-function decodeXmlEntities(text = "") {
+function decodeHtmlEntities(text = "") {
+  if (typeof text !== "string") return text ?? "";
+
   return text
-    .replace(/<!\[CDATA\[(.*?)\]\]>/gs, "$1")
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8220;/g, "\"")
+    .replace(/&#8221;/g, "\"")
+    .replace(/&#8211;/g, "-")
+    .replace(/&#8212;/g, "-")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
     .replace(/&apos;/g, "'")
     .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
+    .replace(/&gt;/g, ">")
+    .replace(/&#160;/g, " ")
+    .replace(/<!\[CDATA\[(.*?)\]\]>/gs, "$1");
 }
-
 function stripHtml(text = "") {
-  return decodeXmlEntities(text)
+  return decodeHtmlEntities(text)
     .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -139,46 +148,36 @@ function parseItemsFromXml(xml) {
 }
 
 function parseSingleItem(itemXml) {
-  const title = extractTag(itemXml, "title");
+  const title = decodeHtmlEntities(stripHtml(extractTag(itemXml, "title")));
   const link = extractLink(itemXml);
-  const description =
+  const description = decodeHtmlEntities(stripHtml(
     extractTag(itemXml, "description") ||
     extractTag(itemXml, "content:encoded") ||
-    extractTag(itemXml, "content");
-  const pubDate =
-    extractTag(itemXml, "pubDate") ||
+    extractTag(itemXml, "content")
+  ));
+  const pubDate = extractTag(itemXml, "pubDate") ||
     extractTag(itemXml, "dc:date") ||
     extractTag(itemXml, "published") ||
     extractTag(itemXml, "updated");
 
   if (!title || !link) return null;
 
-  return {
-    title,
-    link,
-    description,
-    pubDate
-  };
+  return { title, link, description, pubDate };
 }
 
 function parseSingleEntry(entryXml) {
-  const title = extractTag(entryXml, "title");
+  const title = decodeHtmlEntities(stripHtml(extractTag(entryXml, "title")));
   const link = extractLink(entryXml);
-  const description =
+  const description = decodeHtmlEntities(stripHtml(
     extractTag(entryXml, "summary") ||
-    extractTag(entryXml, "content");
-  const pubDate =
-    extractTag(entryXml, "updated") ||
+    extractTag(entryXml, "content")
+  ));
+  const pubDate = extractTag(entryXml, "updated") ||
     extractTag(entryXml, "published");
 
   if (!title || !link) return null;
 
-  return {
-    title,
-    link,
-    description,
-    pubDate
-  };
+  return { title, link, description, pubDate };
 }
 
 function normalizeDate(value) {
@@ -279,22 +278,22 @@ async function buildNewsPayload() {
   const featuredItem = filtered[0];
   const latestItems = filtered.slice(1, 4);
 
-  return {
+ return {
     featured: {
       kicker: featuredItem.category || "Actualidad gastronómica",
-      title: featuredItem.title,
-      summary: createSummary(featuredItem.description),
-      whyItMatters: buildWhyItMatters(featuredItem),
+      title: decodeHtmlEntities(featuredItem.title),
+      summary: decodeHtmlEntities(createSummary(featuredItem.description)),
+      whyItMatters: decodeHtmlEntities(buildWhyItMatters(featuredItem)),
       publishedAt: featuredItem.publishedAt,
-      sourceName: featuredItem.sourceName,
+      sourceName: decodeHtmlEntities(featuredItem.sourceName),
       sourceUrl: featuredItem.sourceUrl
     },
     latest: latestItems.map((item) => ({
       kicker: item.category || "Actualidad gastronómica",
-      title: item.title,
-      summary: createSummary(item.description),
+      title: decodeHtmlEntities(item.title),
+      summary: decodeHtmlEntities(createSummary(item.description)),
       publishedAt: item.publishedAt,
-      sourceName: item.sourceName,
+      sourceName: decodeHtmlEntities(item.sourceName),
       sourceUrl: item.sourceUrl
     }))
   };
