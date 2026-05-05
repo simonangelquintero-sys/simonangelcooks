@@ -1,4 +1,3 @@
-
 const newsList = document.getElementById("newsList");
 
 const featuredKicker = document.getElementById("featuredKicker");
@@ -12,18 +11,15 @@ if (!newsList) {
   console.error("Elemento #newsList no encontrado en el DOM");
 }
 
-// Optimizado (evita crear DOMParser cada vez)
 const textarea = document.createElement("textarea");
+
 function decodeHtmlEntities(value) {
   if (typeof value !== "string") return value ?? "";
 
-  const textarea = document.createElement("textarea");
-
   let decoded = value;
   let previous;
-
-  // Decodifica hasta que no haya cambios (máx 3 veces para seguridad)
   let count = 0;
+
   do {
     previous = decoded;
     textarea.innerHTML = decoded;
@@ -34,13 +30,6 @@ function decodeHtmlEntities(value) {
   return decoded;
 }
 
-function decodeHtmlEntities(value) {
-  if (typeof value !== "string") return value ?? "";
-  textarea.innerHTML = value;
-  return textarea.value;
-}
-
-// Sanitiza URLs para evitar problemas de seguridad
 function safeUrl(url) {
   try {
     const parsed = new URL(url, window.location.origin);
@@ -62,9 +51,6 @@ function formatDate(dateString) {
   }).format(date);
 }
 
-// ===============================
-// Crear tarjeta de noticia
-// ===============================
 function createNewsCard(item) {
   const article = document.createElement("article");
   article.className = "news-card";
@@ -108,12 +94,8 @@ function createNewsCard(item) {
   return article;
 }
 
-// ===============================
-// Render destacado
-// ===============================
 function renderFeatured(featured) {
   if (!featured) return;
-
   if (!featuredTitle || !featuredSummary) return;
 
   featuredKicker.textContent = decodeHtmlEntities(
@@ -128,7 +110,6 @@ function renderFeatured(featured) {
     featured.summary || ""
   );
 
-  // Limpieza sin innerHTML
   featuredWhyItMatters.replaceChildren();
 
   const strong = document.createElement("strong");
@@ -148,9 +129,6 @@ function renderFeatured(featured) {
   featuredSource.href = safeUrl(featured.sourceUrl);
 }
 
-// ===============================
-// Render lista de noticias
-// ===============================
 function renderLatest(items) {
   if (!newsList || !Array.isArray(items)) return;
 
@@ -172,9 +150,6 @@ function renderLatest(items) {
   newsList.appendChild(fragment);
 }
 
-// ===============================
-// Estado de error
-// ===============================
 function renderErrorState() {
   if (newsList) {
     newsList.replaceChildren();
@@ -218,9 +193,6 @@ function renderErrorState() {
   }
 }
 
-// ===============================
-// Estado de carga
-// ===============================
 function renderLoading() {
   if (!newsList) return;
 
@@ -231,9 +203,6 @@ function renderLoading() {
   newsList.appendChild(loading);
 }
 
-// ===============================
-// Fetch principal
-// ===============================
 async function loadNews() {
   renderLoading();
 
@@ -248,14 +217,10 @@ async function loadNews() {
 
     renderFeatured(data.featured);
     renderLatest(data.latest);
-
   } catch (error) {
     console.error("No se pudieron cargar las noticias:", error);
     renderErrorState();
   }
 }
 
-// ===============================
-// Inicialización
-// ===============================
 loadNews();
