@@ -72,13 +72,13 @@ function createNewsCard(item) {
 
   const kicker = document.createElement("p");
   kicker.className = "news-card__kicker";
-  kicker.textContent = cleanText(item.kicker, "Actualidad gastronómica");
+  kicker.textContent = item.kicker || "Actualidad gastronómica";
 
   const title = document.createElement("h3");
-  title.textContent = cleanText(item.title, "Sin título");
+  title.textContent = item.title || "Sin título";
 
   const summary = document.createElement("p");
-  summary.textContent = cleanText(item.summary, "");
+  summary.textContent = item.summary || "";
 
   const meta = document.createElement("div");
   meta.className = "news-meta";
@@ -90,11 +90,10 @@ function createNewsCard(item) {
   sourceWrap.append("Fuente: ");
 
   const sourceLink = document.createElement("a");
-  sourceLink.href = safeUrl(item.sourceUrl);
+  sourceLink.href = item.sourceUrl || "#";
   sourceLink.target = "_blank";
   sourceLink.rel = "noopener noreferrer";
-  sourceLink.textContent = cleanText(item.sourceName, "Fuente externa");
-  sourceLink.setAttribute("aria-label", "Leer fuente original");
+  sourceLink.textContent = item.sourceName || "Curso fuente";
 
   sourceWrap.appendChild(sourceLink);
   meta.appendChild(published);
