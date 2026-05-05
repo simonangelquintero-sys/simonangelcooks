@@ -139,22 +139,22 @@ function extractTag(block, tagName) {
 
 
 function extractLink(block) {
-  // RSS link: >http://example.com</link>
-  const rssLinkMatch = block.match(/[^>]*>(https?:\/\/[^<]+)<\/link>/i);
-  if (rssLinkMatch) {
-    return rssLinkMatch[1].trim();
+  // Intenta primero Atom: //example.com" rel="alternate" type="text/html" />
+  const atomMatch = block.match(/[^>]+href="([^"]+)"[^>]*\/?>/i);
+  if (atomMatch && atomMatch[1].startsWith('http')) {
+    return atomMatch[1].trim();
   }
 
-  // Atom link: //example.com" ... />
-  const atomLinkMatch = block.match(/[^>]*href="([^"]+)"[^>]*\/?>/i);
-  if (atomLinkMatch) {
-    return atomLinkMatch[1].trim();
+  // Intenta RSS: >http://example.com</link>
+  const rssMatch = block.match(/>(https?:\/\/[^<]+)<\/link>/i);
+  if (rssMatch) {
+    return rssMatch[1].trim();
   }
 
-  // Atom link with single quotes: //example.com' ... />
-  const atomLinkSingleQuote = block.match(/[^>]*href='([^']+)'[^>]*\/?>/i);
-  if (atomLinkSingleQuote) {
-    return atomLinkSingleQuote[1].trim();
+  // Fallback: cualquier URL absoluta que empiece con http
+  const fallback = block.match(/(https?:\/\/[^\s"'>]+)/i);
+  if (fallback) {
+    return fallback[1].trim();
   }
 
   return "";
