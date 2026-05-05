@@ -139,11 +139,23 @@ function extractTag(block, tagName) {
 
 
 function extractLink(block) {
-  const rssLink = block.match(/[^>]*>([\s\S]*?)<\/link>/i);
-  if (rssLink) return stripHtml(rssLink[1]);
+  // RSS link: >http://example.com</link>
+  const rssLinkMatch = block.match(/[^>]*>(https?:\/\/[^<]+)<\/link>/i);
+  if (rssLinkMatch) {
+    return rssLinkMatch[1].trim();
+  }
 
-  const atomLink = block.match(/[^>]*href=["']([^"']+)["'][^>]*\/?>/i);
-  if (atomLink) return atomLink[1].trim();
+  // Atom link: //example.com" ... />
+  const atomLinkMatch = block.match(/[^>]*href="([^"]+)"[^>]*\/?>/i);
+  if (atomLinkMatch) {
+    return atomLinkMatch[1].trim();
+  }
+
+  // Atom link with single quotes: //example.com' ... />
+  const atomLinkSingleQuote = block.match(/[^>]*href='([^']+)'[^>]*\/?>/i);
+  if (atomLinkSingleQuote) {
+    return atomLinkSingleQuote[1].trim();
+  }
 
   return "";
 }
