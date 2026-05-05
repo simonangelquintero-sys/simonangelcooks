@@ -1,4 +1,4 @@
-name = "simonangelcooks"
+name = "simonangelcooks-pages"
 main = "../worker/src/index.js"
 compatibility_date = "2026-04-28"
 
