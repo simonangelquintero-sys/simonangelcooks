@@ -1,6 +1,7 @@
 const NEWS_KEY = "latest-news";
 const REFRESH_SECRET = "simon-news-2026-utah";
 
+
 const RSS_FEEDS = [
   {
     name: "Restaurant Business",
@@ -24,6 +25,7 @@ const RSS_FEEDS = [
   }
 ];
 
+
 const DEFAULT_NEWS = {
   featured: {
     kicker: "Actualidad gastronómica",
@@ -38,6 +40,7 @@ const DEFAULT_NEWS = {
   },
   latest: []
 };
+
 
 const KEYWORDS = [
   "food",
@@ -75,6 +78,7 @@ const KEYWORDS = [
   "insumos"
 ];
 
+
 function jsonResponse(data, init = {}) {
   return Response.json(data, {
     headers: {
@@ -85,14 +89,17 @@ function jsonResponse(data, init = {}) {
   });
 }
 
+
 async function getStoredNews(env) {
   const stored = await env.NEWS_KV.get(NEWS_KEY, "json");
   return stored || DEFAULT_NEWS;
 }
 
+
 async function saveNews(env, payload) {
   await env.NEWS_KV.put(NEWS_KEY, JSON.stringify(payload));
 }
+
 
 function decodeHtmlEntities(text = "") {
   if (typeof text !== "string") return text ?? "";
@@ -114,6 +121,8 @@ function decodeHtmlEntities(text = "") {
     .replace(/&#160;/g, " ")
     .replace(/<!\[CDATA\[(.*?)\]\]>/gs, "$1");
 }
+
+
 function stripHtml(text = "") {
   return decodeHtmlEntities(text)
     .replace(/<[^>]*>/g, " ")
@@ -121,21 +130,24 @@ function stripHtml(text = "") {
     .trim();
 }
 
+
 function extractTag(block, tagName) {
   const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, "i");
   const match = block.match(regex);
   return match ? stripHtml(match[1]) : "";
 }
 
+
 function extractLink(block) {
-  const rssLink = block.match(/<link[^>]*>([\s\S]*?)<\/link>/i);
+  const rssLink = block.match(/[^>]*>([\s\S]*?)<\/link>/i);
   if (rssLink) return stripHtml(rssLink[1]);
 
-  const atomLink = block.match(/<link[^>]*href=["']([^"']+)["'][^>]*\/?>/i);
+  const atomLink = block.match(/[^>]*href=["']([^"']+)["'][^>]*\/?>/i);
   if (atomLink) return atomLink[1].trim();
 
   return "";
 }
+
 
 function parseItemsFromXml(xml) {
   const itemMatches = [...xml.matchAll(/<item\b[\s\S]*?<\/item>/gi)].map((m) => m[0]);
@@ -147,38 +159,51 @@ function parseItemsFromXml(xml) {
   return entryMatches.map(parseSingleEntry).filter(Boolean);
 }
 
+
 function parseSingleItem(itemXml) {
-  const title = decodeHtmlEntities(stripHtml(extractTag(itemXml, "title")));
+  const titleRaw = extractTag(itemXml, "title");
   const link = extractLink(itemXml);
-  const description = decodeHtmlEntities(stripHtml(
+  const descriptionRaw =
     extractTag(itemXml, "description") ||
     extractTag(itemXml, "content:encoded") ||
-    extractTag(itemXml, "content")
-  ));
-  const pubDate = extractTag(itemXml, "pubDate") ||
+    extractTag(itemXml, "content");
+  const pubDate =
+    extractTag(itemXml, "pubDate") ||
     extractTag(itemXml, "dc:date") ||
     extractTag(itemXml, "published") ||
     extractTag(itemXml, "updated");
 
-  if (!title || !link) return null;
+  if (!titleRaw || !link) return null;
 
-  return { title, link, description, pubDate };
+  return {
+    title: decodeHtmlEntities(titleRaw),
+    link,
+    description: decodeHtmlEntities(descriptionRaw),
+    pubDate
+  };
 }
+
 
 function parseSingleEntry(entryXml) {
-  const title = decodeHtmlEntities(stripHtml(extractTag(entryXml, "title")));
+  const titleRaw = extractTag(entryXml, "title");
   const link = extractLink(entryXml);
-  const description = decodeHtmlEntities(stripHtml(
+  const descriptionRaw =
     extractTag(entryXml, "summary") ||
-    extractTag(entryXml, "content")
-  ));
-  const pubDate = extractTag(entryXml, "updated") ||
+    extractTag(entryXml, "content");
+  const pubDate =
+    extractTag(entryXml, "updated") ||
     extractTag(entryXml, "published");
 
-  if (!title || !link) return null;
+  if (!titleRaw || !link) return null;
 
-  return { title, link, description, pubDate };
+  return {
+    title: decodeHtmlEntities(titleRaw),
+    link,
+    description: decodeHtmlEntities(descriptionRaw),
+    pubDate
+  };
 }
+
 
 function normalizeDate(value) {
   const date = new Date(value);
@@ -186,10 +211,12 @@ function normalizeDate(value) {
   return date.toISOString();
 }
 
+
 function includesKeyword(text = "") {
   const normalized = text.toLowerCase();
   return KEYWORDS.some((keyword) => normalized.includes(keyword));
 }
+
 
 function createSummary(text = "") {
   const clean = stripHtml(text);
@@ -198,6 +225,7 @@ function createSummary(text = "") {
   }
   return clean.length > 220 ? `${clean.slice(0, 217)}...` : clean;
 }
+
 
 function guessKicker(sourceCategory, title, description) {
   const combined = `${title} ${description}`.toLowerCase();
@@ -217,6 +245,7 @@ function guessKicker(sourceCategory, title, description) {
   return sourceCategory || "Actualidad gastronómica";
 }
 
+
 function buildWhyItMatters(item) {
   const text = `${item.title} ${item.description}`.toLowerCase();
 
@@ -234,6 +263,7 @@ function buildWhyItMatters(item) {
 
   return "Aporta contexto útil para seguir tendencias relevantes en gastronomía, alimentos y hospitalidad.";
 }
+
 
 async function fetchFeed(feed) {
   try {
@@ -253,8 +283,8 @@ async function fetchFeed(feed) {
     return items.map((item) => ({
       sourceName: feed.name,
       sourceUrl: item.link,
-      title: item.title,
-      description: item.description,
+      title: decodeHtmlEntities(item.title),
+      description: decodeHtmlEntities(item.description),
       publishedAt: normalizeDate(item.pubDate),
       category: guessKicker(feed.category, item.title, item.description)
     }));
@@ -262,6 +292,7 @@ async function fetchFeed(feed) {
     return [];
   }
 }
+
 
 async function buildNewsPayload() {
   const feedResults = await Promise.all(RSS_FEEDS.map(fetchFeed));
@@ -278,7 +309,7 @@ async function buildNewsPayload() {
   const featuredItem = filtered[0];
   const latestItems = filtered.slice(1, 4);
 
- return {
+  return {
     featured: {
       kicker: featuredItem.category || "Actualidad gastronómica",
       title: decodeHtmlEntities(featuredItem.title),
@@ -299,11 +330,13 @@ async function buildNewsPayload() {
   };
 }
 
+
 async function refreshNews(env) {
   const payload = await buildNewsPayload();
   await saveNews(env, payload);
   return payload;
 }
+
 
 export default {
   async fetch(request, env, ctx) {
