@@ -67,6 +67,8 @@ function formatDate(dateString) {
 }
 
 function createNewsCard(item) {
+  console.log("Datos del item recibido:", item);
+
   const article = document.createElement("article");
   article.className = "news-card";
 
@@ -83,24 +85,26 @@ function createNewsCard(item) {
   const meta = document.createElement("div");
   meta.className = "news-meta";
 
-  // FECHA
+  // FECHA (Aseguramos que tome cualquier variante de nombre)
+  const rawDate = item.publishedAt || item.pubDate || item.date;
   const published = document.createElement("span");
   published.className = "news-meta__date";
-  const dateStr = formatDate(item.publishedAt);
-  published.textContent = `Publicado: ${dateStr}`;
+  published.textContent = `Publicado: ${formatDate(rawDate)}`;
 
-  // FUENTE con enlace real
+  // FUENTE (Aseguramos que el link tenga href y texto)
   const sourceWrap = document.createElement("span");
   sourceWrap.className = "news-meta__source";
-  sourceWrap.append("Fuente: ");
+  sourceWrap.textContent = "Fuente: ";
 
   const sourceLink = document.createElement("a");
-  const sourceUrl = item.sourceUrl;
-  sourceLink.href = sourceUrl && sourceUrl !== "#" ? sourceUrl : "#";
+  // Intentamos obtener la URL de varias propiedades comunes
+  const finalUrl = item.sourceUrl || item.url || item.link;
+  
+  sourceLink.href = safeUrl(finalUrl);
   sourceLink.target = "_blank";
   sourceLink.rel = "noopener noreferrer";
-  sourceLink.textContent = item.sourceName || "Leer fuente";
   sourceLink.className = "news-meta__source-link";
+  sourceLink.textContent = "Leer fuente"; // Texto fijo como pediste
 
   sourceWrap.appendChild(sourceLink);
   meta.appendChild(published);
