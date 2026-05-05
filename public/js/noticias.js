@@ -83,17 +83,24 @@ function createNewsCard(item) {
   const meta = document.createElement("div");
   meta.className = "news-meta";
 
+  // FECHA
   const published = document.createElement("span");
-  published.textContent = `Publicado: ${formatDate(item.publishedAt)}`;
+  published.className = "news-meta__date";
+  const dateStr = formatDate(item.publishedAt);
+  published.textContent = `Publicado: ${dateStr}`;
 
+  // FUENTE con enlace real
   const sourceWrap = document.createElement("span");
+  sourceWrap.className = "news-meta__source";
   sourceWrap.append("Fuente: ");
 
   const sourceLink = document.createElement("a");
-  sourceLink.href = item.sourceUrl || "#";
+  const sourceUrl = item.sourceUrl;
+  sourceLink.href = sourceUrl && sourceUrl !== "#" ? sourceUrl : "#";
   sourceLink.target = "_blank";
   sourceLink.rel = "noopener noreferrer";
-  sourceLink.textContent = item.sourceName || "Curso fuente";
+  sourceLink.textContent = item.sourceName || "Leer fuente";
+  sourceLink.className = "news-meta__source-link";
 
   sourceWrap.appendChild(sourceLink);
   meta.appendChild(published);
